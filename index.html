@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🛍️ Mi Tienda Online</title>
-
+<title>🛍️ Mi Tienda Profesional</title>
 <style>
   :root {
     --bg: #f4f6f8;
-    --card-bg: #ffffff;
+    --card-bg: #fff;
     --accent: #22c55e;
     --accent-dark: #16a34a;
     --text: #1f2937;
@@ -30,13 +29,12 @@
     margin: 30px 0;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--text);
   }
 
   .feed {
-    max-width: 680px;
+    max-width: 700px;
     margin: 0 auto;
-    padding: 10px 15px 80px;
+    padding: 10px 15px 100px;
   }
 
   .post {
@@ -52,27 +50,49 @@
     will-change: transform, opacity, filter;
   }
 
-  /* 🎬 Fade in + movimiento al entrar */
   .post.in-view {
     opacity: 1;
     transform: translateY(0) scale(1);
     filter: blur(0);
   }
 
-  .post img {
+  /* Carrusel de imágenes */
+  .carousel {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .carousel img {
     width: 100%;
-    height: 400px;
+    height: 380px;
     object-fit: cover;
-    transition: transform 1.2s ease, filter 1s ease;
+    transition: transform 1s ease, filter 0.8s ease;
     transform-origin: center;
     display: block;
   }
 
-  /* 🌟 Efecto 3D suave al pasar el mouse */
-  .post img:hover {
-    transform: scale(1.1) rotate3d(1, 1, 0, 3deg);
+  .carousel img:hover {
+    transform: scale(1.08);
     filter: brightness(1.1);
   }
+
+  /* Flechas de navegación */
+  .carousel .prev, .carousel .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 2;
+  }
+
+  .carousel .prev { left: 10px; }
+  .carousel .next { right: 10px; }
 
   .info {
     padding: 20px;
@@ -90,7 +110,6 @@
   .info h2 {
     font-size: 22px;
     margin: 10px 0;
-    color: var(--text);
   }
 
   .price {
@@ -110,6 +129,7 @@
   .rating {
     color: #fbbf24;
     margin-bottom: 10px;
+    font-size: 18px;
   }
 
   .buy-btn {
@@ -138,28 +158,16 @@
     font-size: 14px;
   }
 
-  footer p {
-    margin: 6px 0;
-  }
-
-  /* 📱 Responsividad */
   @media (max-width: 600px) {
-    .post img {
-      height: 300px;
-    }
-    .info h2 {
-      font-size: 18px;
-    }
-    .price {
-      font-size: 16px;
-    }
+    .carousel img { height: 300px; }
+    .info h2 { font-size: 18px; }
+    .price { font-size: 16px; }
   }
 </style>
 </head>
 <body>
 
-<h1>🛒 Publicaciones de Mi Tienda</h1>
-
+<h1>🛒 Productos de Mi Tienda</h1>
 <div class="feed" id="productFeed"></div>
 
 <footer>
@@ -169,51 +177,53 @@
 </footer>
 
 <script>
-// 🖼️ Productos dinámicos
+// Productos
 const productos = [
   {
-    imagen: "activo/reloj.jpg",
     nombre: "⌚ Reloj Digital",
     precio: "$25.00",
     descripcion: "Pantalla LED, resistente al agua y diseño elegante.",
     whatsapp: "5355555555",
-    rating: 5
+    rating: 5,
+    fotos: ["activo/reloj.jpg", "activo/reloj2.jpg", "activo/reloj3.jpg"]
   },
   {
-    imagen: "activo/auriculares.jpg",
     nombre: "🎧 Auriculares Bluetooth",
     precio: "$30.00",
     descripcion: "Cancelación de ruido, conexión estable y carga rápida.",
     whatsapp: "5355555555",
-    rating: 4
+    rating: 4,
+    fotos: ["activo/auriculares.jpg", "activo/auriculares2.jpg"]
   },
   {
-    imagen: "activo/camara.jpg",
     nombre: "📷 Cámara Deportiva HD",
     precio: "$60.00",
     descripcion: "Graba tus aventuras en alta definición con accesorios incluidos.",
     whatsapp: "5355555555",
-    rating: 5
-  },
-  {
-    imagen: "activo/smartphone.jpg",
-    nombre: "📱 Smartphone Android",
-    precio: "$180.00",
-    descripcion: "Pantalla AMOLED, batería de larga duración y cámara triple.",
-    whatsapp: "5355555555",
-    rating: 5
+    rating: 5,
+    fotos: ["activo/camara.jpg", "activo/camara2.jpg", "activo/camara3.jpg"]
   }
 ];
 
-// 🚀 Crear los posts dinámicamente
+// Crear posts
 const feed = document.getElementById("productFeed");
-productos.forEach(prod => {
+productos.forEach((prod, i) => {
   const post = document.createElement("div");
   post.className = "post";
+
   const stars = "⭐".repeat(prod.rating) + "☆".repeat(5 - prod.rating);
-  const whatsappLink = `https://wa.me/${prod.whatsapp}?text=Hola!%20Estoy%20interesado%20en%20${encodeURIComponent(prod.nombre)}%20que%20vi%20en%20su%20tienda.`;
+  const whatsappLink = `https://wa.me/${prod.whatsapp}?text=Hola!%20Estoy%20interesado%20en%20${encodeURIComponent(prod.nombre)}`;
+
+  // Carrusel
+  const carouselHtml = `
+    <div class="carousel" id="carousel-${i}">
+      ${prod.fotos.map((f, idx) => `<img src="${f}" style="${idx === 0 ? '' : 'display:none;'}">`).join('')}
+      ${prod.fotos.length > 1 ? '<button class="prev">&#10094;</button><button class="next">&#10095;</button>' : ''}
+    </div>
+  `;
+
   post.innerHTML = `
-    <img src="${prod.imagen}" alt="${prod.nombre}">
+    ${carouselHtml}
     <div class="info">
       <h2>${prod.nombre}</h2>
       <div class="price">${prod.precio}</div>
@@ -223,9 +233,28 @@ productos.forEach(prod => {
     </div>
   `;
   feed.appendChild(post);
+
+  // Carrusel funcional
+  const carousel = post.querySelector('.carousel');
+  const imgs = carousel.querySelectorAll('img');
+  let current = 0;
+  const prevBtn = carousel.querySelector('.prev');
+  const nextBtn = carousel.querySelector('.next');
+  if (prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', () => {
+      imgs[current].style.display = "none";
+      current = (current - 1 + imgs.length) % imgs.length;
+      imgs[current].style.display = "block";
+    });
+    nextBtn.addEventListener('click', () => {
+      imgs[current].style.display = "none";
+      current = (current + 1) % imgs.length;
+      imgs[current].style.display = "block";
+    });
+  }
 });
 
-// 👁️ Activar animaciones al entrar en vista
+// Intersection Observer para animaciones fade + slide
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) entry.target.classList.add("in-view");
@@ -233,6 +262,18 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.25 });
 
 document.querySelectorAll(".post").forEach(p => observer.observe(p));
+
+// Efecto infinito: duplicar feed al final al llegar abajo
+let feedEnd = false;
+window.addEventListener('scroll', () => {
+  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200 && !feedEnd) {
+    feedEnd = true;
+    const clone = feed.cloneNode(true);
+    feed.appendChild(clone);
+    clone.querySelectorAll(".post").forEach(p => observer.observe(p));
+    feedEnd = false;
+  }
+});
 </script>
 
 </body>
