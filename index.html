@@ -24,7 +24,9 @@ body {
   overflow-x:hidden;
 }
 
-/* Pantalla de presentación */
+/* -------------------------------
+   Pantalla de presentación
+--------------------------------*/
 #intro {
   position: fixed; top:0; left:0; width:100%; height:100%;
   background:#f4f4f4;
@@ -35,20 +37,32 @@ body {
 #intro p { font-size:1.2rem; color:#111827; }
 #intro.fade-out { opacity:0; pointer-events:none; }
 
-/* Títulos y feed */
+/* -------------------------------
+   Títulos y feed
+--------------------------------*/
 h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:var(--text); }
-.feed { max-width:700px; margin:0 auto; padding:10px 15px 50px; }
+.feed { max-width:700px; margin:0 auto; padding:10px 15px 80px; }
 
-/* Productos */
+/* -------------------------------
+   Productos
+--------------------------------*/
 .post {
-  background: var(--card-bg); border-radius:18px; margin-bottom:30px;
-  box-shadow: var(--shadow); overflow:hidden; opacity:0;
-  transform: translateY(80px) scale(0.96); filter:blur(8px);
-  transition: var(--transition); will-change: transform, opacity, filter;
+  background: var(--card-bg); 
+  border-radius:18px; 
+  margin-bottom:50px; /* MÁS ESPACIO ENTRE PRODUCTOS */
+  box-shadow: var(--shadow); 
+  overflow:hidden; 
+  opacity:0;
+  transform: translateY(80px) scale(0.96); 
+  filter:blur(8px);
+  transition: var(--transition); 
+  will-change: transform, opacity, filter;
 }
 .post.in-view { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
 
-/* Carrusel de imágenes */
+/* -------------------------------
+   Carrusel de imágenes
+--------------------------------*/
 .carousel { position: relative; overflow: hidden; }
 .carousel img { width: 100%; height: auto; max-height: 380px; object-fit: cover;
   transition: transform 1s ease, filter 0.8s ease; transform-origin:center;
@@ -61,7 +75,8 @@ h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:va
   border-radius:50%; cursor:pointer; font-size:22px; z-index:2; transition: background 0.3s ease;
 }
 .carousel .prev:hover, .carousel .next:hover { background: rgba(0,0,0,0.6); }
-.carousel .prev { left:10px; } .carousel .next { right:10px; }
+.carousel .prev { left:10px; } 
+.carousel .next { right:10px; }
 
 /* Indicador de número de foto */
 .photo-counter {
@@ -70,12 +85,14 @@ h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:va
   border-radius:12px; font-size:14px;
 }
 
-/* Info del producto */
-.info { padding:20px; text-align:center; opacity:0; transform:translateY(30px); transition:all 0.8s ease; }
+/* -------------------------------
+   Info del producto
+--------------------------------*/
+.info { padding:25px; text-align:center; opacity:0; transform:translateY(30px); transition:all 0.8s ease; }
 .post.in-view .info { opacity:1; transform:translateY(0); }
 .info h2 { font-size:22px; margin:10px 0; color:var(--text); }
-.price { font-size:19px; color:#3b82f6; font-weight:600; margin:8px 0; }
-.desc { font-size:15px; color:var(--subtext); margin:10px 0; line-height:1.6; }
+.price { font-size:20px; color:#3b82f6; font-weight:600; margin:8px 0; }
+.desc { font-size:16px; color:var(--subtext); margin:12px 0; line-height:1.6; }
 .rating { color:#fbbf24; margin-bottom:10px; font-size:18px; }
 
 /* Botón de compra */
@@ -85,23 +102,29 @@ h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:va
 .buy-btn:hover { background: var(--accent-dark); transform:scale(1.05);
   box-shadow:0 8px 25px rgba(22,163,74,0.4); }
 
+/* -------------------------------
+   Footer
+--------------------------------*/
 footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6; font-size:14px; }
 
 @media(max-width:600px){
   .carousel img{height:250px;}
   .info h2{font-size:18px;}
   .price{font-size:16px;}
+  .desc{font-size:14px;}
 }
 
-/* Carrito flotante */
-#cart { position: fixed; top:50%; right:20px; transform:translateY(-50%);
+/* -------------------------------
+   Carrito flotante (ahora más abajo)
+--------------------------------*/
+#cart { position: fixed; bottom:20px; right:20px; /* cambiado a bottom para más abajo */
   background:var(--accent); color:#fff; width:60px; height:60px;
   border-radius:50%; font-size:28px; display:flex; align-items:center; justify-content:center;
   box-shadow:0 6px 20px rgba(34,197,94,0.3); cursor:pointer; transition:all 0.3s ease; z-index:10000; }
 #cart:hover { background: var(--accent-dark); transform: scale(1.1); }
 
 #cartContent {
-  position:fixed; top:50%; right:90px; transform:translateY(-50%);
+  position:fixed; bottom:90px; right:20px; /* también más abajo */
   background: var(--card-bg); color: var(--text); padding:15px; border-radius:12px;
   max-width:250px; box-shadow: var(--shadow); display:none; z-index:9999;
 }
@@ -111,6 +134,9 @@ footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6
 </head>
 <body>
 
+<!-- -------------------------------
+     Pantalla de presentación
+---------------------------------->
 <div id="intro">
   <h1>Bienvenido a Mi Tienda</h1>
   <p>Descubre productos increíbles</p>
@@ -119,6 +145,9 @@ footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6
 <h1>🛒 Productos de Mi Tienda</h1>
 <div class="feed" id="productFeed"></div>
 
+<!-- -------------------------------
+     Carrito flotante
+---------------------------------->
 <div id="cart">🛒</div>
 <div id="cartContent">
   <h3>Tu Carrito</h3>
@@ -131,10 +160,14 @@ footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6
 </footer>
 
 <script>
-// Ocultar intro
+// -------------------------------
+// Ocultar intro automáticamente
+// -------------------------------
 setTimeout(()=>{ document.getElementById('intro').classList.add('fade-out'); },3000);
 
-// Productos
+// -------------------------------
+// Lista de productos
+// -------------------------------
 const productos = [
   { nombre: "⌚ Reloj Digital", precio:25, descripcion:"Pantalla LED, resistente al agua y diseño elegante.", whatsapp:"5355555555", rating:5, fotos:["activo/reloj.jpg","activo/reloj2.jpg","activo/reloj3.jpg"] },
   { nombre: "🎧 Auriculares Bluetooth", precio:30, descripcion:"Cancelación de ruido, conexión estable y carga rápida.", whatsapp:"5355555555", rating:4, fotos:["activo/auriculares.jpg","activo/auriculares2.jpg"] },
@@ -143,12 +176,15 @@ const productos = [
 
 const feed = document.getElementById("productFeed");
 
+// -------------------------------
+// Crear productos dinámicamente
+// -------------------------------
 productos.forEach((prod,i)=>{
   const post=document.createElement("div");
   post.className="post";
   const stars="⭐".repeat(prod.rating)+"☆".repeat(5-prod.rating);
 
-  // Carrusel HTML con contador
+  // Carrusel con contador de fotos
   const carouselHtml = `
     <div class="carousel" id="carousel-${i}">
       ${prod.fotos.map((f,idx)=>`<img src="${f}" style="${idx===0?'':'display:none;'}">`).join('')}
@@ -169,7 +205,9 @@ productos.forEach((prod,i)=>{
   `;
   feed.appendChild(post);
 
-  // Carrusel
+  // -------------------------------
+  // Carrusel funcional
+  // -------------------------------
   const carousel = post.querySelector('.carousel');
   const imgs = carousel.querySelectorAll('img');
   let current = 0;
@@ -193,7 +231,9 @@ productos.forEach((prod,i)=>{
   }
 });
 
-// Animación fade+slide al aparecer
+// -------------------------------
+// Animación al entrar en pantalla
+// -------------------------------
 const observer = new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting) entry.target.classList.add("in-view");
@@ -201,7 +241,9 @@ const observer = new IntersectionObserver(entries=>{
 },{threshold:0.25});
 document.querySelectorAll(".post").forEach(p=>observer.observe(p));
 
-// Carrito flotante toggle
+// -------------------------------
+// Toggle carrito flotante
+// -------------------------------
 const cart = document.getElementById('cart');
 const cartContent = document.getElementById('cartContent');
 cart.addEventListener('click', ()=>{
@@ -211,4 +253,3 @@ cart.addEventListener('click', ()=>{
 
 </body>
 </html>
-
