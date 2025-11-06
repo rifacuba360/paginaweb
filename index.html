@@ -21,68 +21,145 @@ body {
   font-family:'Poppins', sans-serif;
   background: var(--bg);
   color: var(--text);
+  overflow-x:hidden;
 }
 
-/* Encabezado */
-h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; }
-
-/* Contenedor de productos */
-.feed { 
-  max-width:700px; 
-  margin:0 auto; 
-  padding:10px 15px 80px; 
+/* =========================
+   Pantalla de presentación
+========================= */
+#intro {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  background:#f4f4f4;
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  z-index:9999; transition: opacity 1s ease;
 }
+#intro h1 { font-size:3rem; color:#111827; margin-bottom:20px; text-align:center; }
+#intro p { font-size:1.2rem; color:#111827; }
+#intro.fade-out { opacity:0; pointer-events:none; }
 
-/* Tarjeta del producto */
+/* =========================
+   Productos
+========================= */
+h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:var(--text); }
+.feed { max-width:700px; margin:0 auto; padding:10px 15px 80px; }
+
 .post {
-  background: var(--card-bg); 
-  border-radius:18px; 
-  margin-bottom:40px; 
-  box-shadow: var(--shadow); 
-  overflow:hidden; 
-  transition: all 0.6s ease;
+  background: var(--card-bg);
+  border-radius:18px;
+  margin-bottom:40px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(80px) scale(0.96);
+  filter:blur(8px);
+  transition:all 0.7s ease;
 }
+.post.in-view { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
 
-/* Imagen del producto */
-.carousel img { 
-  width: 100%; 
-  height: 350px; 
-  object-fit: cover; 
-  display: block; 
+/* =========================
+   Imagen del producto
+========================= */
+.carousel {
+  position:relative;
+  overflow:hidden;
+}
+.carousel img {
+  width:100%;
+  height:350px;
+  object-fit:cover;
+  display:block;
   border-radius:18px 18px 0 0;
+  opacity:0;
+  position:absolute;
+  top:0; left:0;
+  transition:opacity 0.7s ease;
+}
+.carousel img.active { opacity:1; }
+.photo-counter {
+  position:absolute; bottom:10px; right:10px;
+  background:rgba(0,0,0,0.6);
+  color:#fff; padding:5px 10px; border-radius:12px;
+  font-size:14px;
 }
 
-/* Información debajo de la imagen */
-.info { 
-  padding:20px; 
-  text-align:center; 
-}
+/* =========================
+   Info del producto
+========================= */
+.info { padding:20px; text-align:center; }
 .info h2 { font-size:22px; margin:10px 0; color:var(--text); }
 .price { font-size:20px; color:#3b82f6; font-weight:600; margin:8px 0; }
 .desc { font-size:16px; color:var(--subtext); margin:12px 0; line-height:1.6; }
 .rating { color:#fbbf24; margin-bottom:10px; font-size:18px; }
 
-/* Botón de WhatsApp */
-.buy-btn { 
-  display:inline-block; 
-  background: var(--accent); 
-  color:#fff;
-  padding:12px 30px; 
-  border-radius:50px; 
-  font-weight:600; 
-  text-decoration:none;
-  transition: all 0.4s ease; 
+/* Botón */
+.buy-btn {
+  display:inline-block; background: var(--accent); color:#fff;
+  padding:12px 30px; border-radius:50px;
+  font-weight:600; text-decoration:none;
+  box-shadow:0 6px 20px rgba(34,197,94,0.3);
+  transition:all 0.4s ease; margin:5px;
 }
-.buy-btn:hover { background: var(--accent-dark); transform:scale(1.05); }
+.buy-btn:hover {
+  background: var(--accent-dark);
+  transform:scale(1.05);
+  box-shadow:0 8px 25px rgba(22,163,74,0.4);
+}
 
-/* Footer */
+/* =========================
+   Footer
+========================= */
 footer { text-align:center; padding:25px 10px; background:#111827; color:#f3f4f6; font-size:14px; }
+
+/* =========================
+   Carrito flotante
+========================= */
+#cart {
+  position: fixed;
+  bottom:20px; right:20px;
+  background:var(--accent); color:#fff;
+  width:60px; height:60px;
+  border-radius:50%; font-size:28px;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 20px rgba(34,197,94,0.3);
+  cursor:pointer; transition:all 0.3s ease; z-index:10000;
+}
+#cart:hover { background: var(--accent-dark); transform: scale(1.1); }
+
+#cartContent {
+  position:fixed; bottom:90px; right:20px;
+  background: var(--card-bg); color: var(--text);
+  padding:15px; border-radius:12px;
+  max-width:250px; box-shadow: var(--shadow);
+  display:none; z-index:9999;
+}
+#cartContent h3 { margin-top:0; font-size:18px; }
+#cartContent p { margin:5px 0; font-size:14px; }
+
+@media(max-width:600px){
+  .carousel img{height:250px;}
+  .info h2{font-size:18px;}
+  .price{font-size:16px;}
+  .desc{font-size:14px;}
+}
 </style>
 </head>
 <body>
 
+<!-- Pantalla de bienvenida -->
+<div id="intro">
+  <h1>Bienvenido a Mi Tienda</h1>
+  <p>Descubre productos increíbles</p>
+</div>
+
 <h1>🛒 Catálogo de Productos</h1>
 <div class="feed" id="productFeed"></div>
+
+<!-- Carrito flotante -->
+<div id="cart">🛒</div>
+<div id="cartContent">
+  <h3>Tu Carrito</h3>
+  <p>Aquí verás tus productos próximamente</p>
+</div>
 
 <footer>
   <p><strong>📍 Mi Tienda Online</strong></p>
@@ -91,7 +168,14 @@ footer { text-align:center; padding:25px 10px; background:#111827; color:#f3f4f6
 </footer>
 
 <script>
-// Productos
+// ============================
+// Ocultar pantalla de intro
+// ============================
+setTimeout(()=>{ document.getElementById('intro').classList.add('fade-out'); },3000);
+
+// ============================
+// Lista de productos
+// ============================
 const productos = [
   { 
     nombre: "⌚ Reloj Digital",
@@ -115,17 +199,26 @@ const productos = [
   }
 ];
 
+// ============================
+// Mostrar productos
+// ============================
 const feed = document.getElementById("productFeed");
-
-productos.forEach(prod=>{
+productos.forEach((prod,i)=>{
   const post = document.createElement("div");
   post.className = "post";
   const stars = "⭐".repeat(prod.rating)+"☆".repeat(5-prod.rating);
 
-  post.innerHTML = `
-    <div class="carousel">
-      <img src="${prod.fotos[0]}" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Sin+imagen';">
+  const carouselHtml = `
+    <div class="carousel" id="carousel-${i}">
+      ${prod.fotos.map((f,idx)=>`
+        <img src="${f}" class="${idx===0?'active':''}" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Sin+imagen'">
+      `).join('')}
+      ${prod.fotos.length>1?`<div class="photo-counter">1 / ${prod.fotos.length}</div>`:''}
     </div>
+  `;
+
+  post.innerHTML = `
+    ${carouselHtml}
     <div class="info">
       <h2>${prod.nombre}</h2>
       <div class="price">$${prod.precio}</div>
@@ -135,6 +228,35 @@ productos.forEach(prod=>{
     </div>
   `;
   feed.appendChild(post);
+
+  // carrusel automático
+  const imgs = post.querySelectorAll(".carousel img");
+  if(imgs.length>1){
+    let current = 0;
+    const counter = post.querySelector(".photo-counter");
+    setInterval(()=>{
+      current = (current+1)%imgs.length;
+      imgs.forEach((img,i)=>img.classList.toggle("active", i===current));
+      if(counter) counter.textContent = `${current+1} / ${imgs.length}`;
+    },3000);
+  }
+});
+
+// ============================
+// Animación de aparición
+// ============================
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add("in-view"); });
+},{threshold:0.25});
+document.querySelectorAll(".post").forEach(p=>observer.observe(p));
+
+// ============================
+// Carrito flotante
+// ============================
+const cart = document.getElementById('cart');
+const cartContent = document.getElementById('cartContent');
+cart.addEventListener('click', ()=>{ 
+  cartContent.style.display = cartContent.style.display==='block'?'none':'block'; 
 });
 </script>
 
