@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🛍️ Catálogo Online</title>
-<link rel="icon" href="https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/reloj.png" type="image/png">
+<link rel="icon" href="https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/reloj.jpg" type="image/png">
 
 <style>
 :root {
@@ -15,7 +15,6 @@
   --text: #f3f4f6;
   --subtext: #9ca3af;
   --shadow: 0 10px 40px rgba(0,0,0,0.6);
-  --transition: all 0.7s ease;
 }
 
 body {
@@ -42,45 +41,12 @@ h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:va
 }
 .post.in-view { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
 
-/* ✅ CARRUSEL */
-.carousel { 
-  position: relative; 
-  overflow: hidden; 
-  cursor: pointer;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 10px; /* Espacio entre imagen y descripción */
-}
+.carousel { position: relative; overflow: hidden; cursor: pointer; margin-bottom: 10px; }
+.carousel img { width: 100%; height: auto; object-fit: cover; display: none; border-radius:18px 18px 0 0; }
+.carousel img.active { display: block; }
 
-.carousel img { 
-  width: 100%; 
-  height: auto; 
-  object-fit: cover;
-  display: none; /* Oculta todas */
-  border-radius:18px 18px 0 0;
-}
-
-.carousel img.active { 
-  display: block; /* Solo activa */
-}
-
-.photo-counter {
-  position:absolute; bottom:10px; right:10px;
-  background: rgba(0,0,0,0.6); color:#fff; padding:5px 10px;
-  border-radius:12px; font-size:14px;
-}
-
-.info { 
-  padding:25px; 
-  text-align:center; 
-  opacity:0; 
-  transform:translateY(30px); 
-  transition:all 0.8s ease; 
-}
+.info { padding:25px; text-align:center; opacity:0; transform:translateY(30px); transition:all 0.8s ease; }
 .post.in-view .info { opacity:1; transform:translateY(0); }
-
 .info h2 { font-size:22px; margin:10px 0; color:var(--text); }
 .price { font-size:20px; color:#3b82f6; font-weight:600; margin:8px 0; }
 .desc { font-size:16px; color:var(--subtext); margin:12px 0; line-height:1.6; }
@@ -94,11 +60,20 @@ h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:va
 
 footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6; font-size:14px; }
 
-@media(max-width:600px){
-  .carousel img{height:auto;}
-  .info h2{font-size:18px;}
-  .price{font-size:16px;}
-  .desc{font-size:14px;}
+/* Carrito emoji */
+#cart { 
+  position: fixed; bottom:20px; right:20px;
+  background:var(--accent); color:#fff; width:60px; height:60px;
+  border-radius:50%; font-size:28px; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 20px rgba(34,197,94,0.3); cursor:pointer; transition:all 0.3s ease; z-index:10000; 
+}
+#cart:hover { background: var(--accent-dark); transform: scale(1.1); }
+
+#cartContent {
+  position:fixed; bottom:90px; right:20px;
+  background: var(--card-bg); color: var(--text); padding:15px; border-radius:12px;
+  max-width:250px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); display:none; z-index:9999;
+  text-align:center;
 }
 </style>
 </head>
@@ -106,6 +81,10 @@ footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6
 <body>
 <h1>🛒 Catálogo de Productos</h1>
 <div class="feed" id="productFeed"></div>
+
+<!-- Carrito emoji -->
+<div id="cart">🛒</div>
+<div id="cartContent">Tu carrito está vacío 🛍️</div>
 
 <footer>
   <p><strong>📍 Tienda Online RifaCuba360</strong></p>
@@ -115,59 +94,13 @@ footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6
 
 <script>
 const productos = [
-  { 
-    nombre: "⌚ Reloj Digital",
-    precio: 25,
-    descripcion: "Pantalla LED, resistente al agua y diseño elegante.",
-    whatsapp: "5355555555",
-    rating: 5,
-    fotos: [
-      "https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/reloj.jpg"
-    ]
-  },
-  {
-    nombre: "🎧 Auriculares Bluetooth",
-    precio: 40,
-    descripcion: "Cancelación de ruido, conexión estable y carga rápida.",
-    whatsapp: "5355555555",
-    rating: 4,
-    fotos: [
-      "https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/imagen1.jpg"
-    ]
-  },
-  {
-    nombre: "📱 Smartphone XYZ",
-    precio: 350,
-    descripcion: "Pantalla AMOLED, 128GB, cámara triple y batería de larga duración.",
-    whatsapp: "5355555555",
-    rating: 5,
-    fotos: [
-      "https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/Smartpnone2.jpg"
-    ]
-  },
-  {
-    nombre: "💻 Laptop Gamer",
-    precio: 1200,
-    descripcion: "16GB RAM, GTX 1660, SSD 512GB y teclado retroiluminado.",
-    whatsapp: "5355555555",
-    rating: 5,
-    fotos: [
-      "https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/latopgamer.jpg"
-    ]
-  },
-  {
-    nombre: "🎮 Consola GameBox",
-    precio: 300,
-    descripcion: "Incluye 2 mandos, 1TB de almacenamiento y soporte 4K.",
-    whatsapp: "5355555555",
-    rating: 4,
-    fotos: [
-      "https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/xbox4.jpg"
-    ]
-  }
+  { nombre: "⌚ Reloj Digital", precio: 25, descripcion: "Pantalla LED, resistente al agua y diseño elegante.", whatsapp: "5355555555", rating: 5, fotos: ["https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/reloj.jpg"] },
+  { nombre: "🎧 Auriculares Bluetooth", precio: 40, descripcion: "Cancelación de ruido, conexión estable y carga rápida.", whatsapp: "5355555555", rating: 4, fotos: ["https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/imagen1.jpg"] },
+  { nombre: "📱 Smartphone XYZ", precio: 350, descripcion: "Pantalla AMOLED, 128GB, cámara triple y batería de larga duración.", whatsapp: "5355555555", rating: 5, fotos: ["https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/Smartpnone2.jpg"] },
+  { nombre: "💻 Laptop Gamer", precio: 1200, descripcion: "16GB RAM, GTX 1660, SSD 512GB y teclado retroiluminado.", whatsapp: "5355555555", rating: 5, fotos: ["https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/latopgamer.jpg"] },
+  { nombre: "🎮 Consola GameBox", precio: 300, descripcion: "Incluye 2 mandos, 1TB de almacenamiento y soporte 4K.", whatsapp: "5355555555", rating: 4, fotos: ["https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/xbox4.jpg"] }
 ];
 
-  
 // Mostrar productos
 const feed = document.getElementById("productFeed");
 productos.forEach((prod,i)=>{
@@ -176,21 +109,17 @@ productos.forEach((prod,i)=>{
   const stars="⭐".repeat(prod.rating)+"☆".repeat(5-prod.rating);
 
   const carouselHtml=`<div class="carousel" id="carousel-${i}">
-      ${prod.fotos.map((f,idx)=>`
-        <img src="${f}" class="${idx===0?'active':''}" onerror="this.src='https://via.placeholder.com/400x300?text=Sin+imagen'">
-      `).join('')}
+      ${prod.fotos.map((f,idx)=>`<img src="${f}" class="${idx===0?'active':''}" onerror="this.src='https://via.placeholder.com/400x300?text=Sin+imagen'">`).join('')}
     </div>`;
 
-  post.innerHTML=`
-    ${carouselHtml}
+  post.innerHTML=`${carouselHtml}
     <div class="info">
       <h2>${prod.nombre}</h2>
       <div class="price">$${prod.precio}</div>
       <div class="rating">${stars}</div>
       <div class="desc">${prod.descripcion}</div>
       <a href="https://wa.me/${prod.whatsapp}?text=Hola!%20Estoy%20interesado%20en%20${encodeURIComponent(prod.nombre)}" target="_blank" class="buy-btn">💬 Comprar por WhatsApp</a>
-    </div>
-  `;
+    </div>`;
   feed.appendChild(post);
 });
 
@@ -200,86 +129,13 @@ const observer=new IntersectionObserver(entries=>{
 },{threshold:0.25});
 document.querySelectorAll(".post").forEach(p=>observer.observe(p));
 
-/* Estilo carrito */
-#cart { 
-  position: fixed; 
-  bottom:20px; 
-  right:20px;
-  background:var(--accent); 
-  color:#fff; 
-  width:60px; 
-  height:60px;
-  border-radius:50%; 
-  font-size:28px; 
-  display:flex; 
-  align-items:center; 
-  justify-content:center;
-  box-shadow:0 6px 20px rgba(34,197,94,0.3); 
-  cursor:pointer; 
-  transition:all 0.3s ease; 
-  z-index:10000; 
-}
-#cart:hover { 
-  background: var(--accent-dark); 
-  transform: scale(1.1); 
-}
-
-#cartContent {
-  position:fixed; 
-  bottom:90px; 
-  right:20px;
-  background: var(--card-bg); 
-  color: var(--text); 
-  padding:15px; 
-  border-radius:12px;
-  max-width:250px; 
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
-  display:none; 
-  z-index:9999;
-}
-#cartContent h3 { margin-top:0; font-size:18px; text-align:center; }
-#cartContent ul { list-style: none; padding:0; margin:0; }
-#cartContent li { margin:8px 0; display:flex; justify-content:space-between; }
-#cartContent li span { font-weight:600; }
-</style>
-</head>
-<body>
-
-<h1>🛒 Productos de Mi Tienda</h1>
-
-<!-- Carrito -->
-<div id="cart">🛒</div>
-<div id="cartContent">
-  <h3>Tu Carrito</h3>
-  <ul id="cartItems">
-    <!-- Aquí se agregan los productos -->
-  </ul>
-</div>
-
-<script>
-// Productos de ejemplo
-const productos = [
-  { nombre: "⌚ Reloj Digital", precio: 25 },
-  { nombre: "🎧 Auriculares Bluetooth", precio: 40 },
-  { nombre: "📱 Smartphone XYZ", precio: 350 }
-];
-
-// Carrito
+// Carrito toggle
 const cart = document.getElementById('cart');
 const cartContent = document.getElementById('cartContent');
-const cartItems = document.getElementById('cartItems');
-
-// Abrir/Cerrar carrito
-cart.addEventListener('click', () => {
+cart.addEventListener('click', ()=>{
   cartContent.style.display = cartContent.style.display === 'block' ? 'none' : 'block';
 });
-
-// Agregar productos al carrito (ejemplo)
-productos.forEach(p => {
-  const li = document.createElement('li');
-  li.innerHTML = `🎁 ${p.nombre} <span>$${p.precio}</span>`;
-  cartItems.appendChild(li);
-});  
 </script>
 </body>
 </html>
+
