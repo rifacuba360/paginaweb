@@ -9,7 +9,7 @@
     --bg: #f0f2f5;
     --card-bg: #fff;
     --accent: #22c55e;
-    --shadow: 0 8px 30px rgba(0,0,0,0.1);
+    --shadow: 0 8px 30px rgba(0,0,0,0.15);
   }
 
   body {
@@ -21,8 +21,10 @@
 
   h1 {
     text-align: center;
-    margin: 20px 0;
+    margin: 25px 0;
     color: #111;
+    font-size: 28px;
+    letter-spacing: -0.5px;
   }
 
   .feed {
@@ -37,38 +39,40 @@
     margin-bottom: 25px;
     box-shadow: var(--shadow);
     overflow: hidden;
-    transform: translateY(40px) scale(0.96);
+    transform: translateY(60px) scale(0.96);
     opacity: 0;
+    filter: blur(6px);
     transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
-    will-change: transform, opacity;
+    will-change: transform, opacity, filter;
   }
 
-  /* ✨ Fade + Deslizamiento al entrar */
+  /* 🎬 Efecto fade + movimiento lateral al aparecer */
   .post.in-view {
     transform: translateY(0) scale(1);
     opacity: 1;
+    filter: blur(0);
   }
 
   .post img {
     width: 100%;
-    height: 360px;
+    height: 380px;
     object-fit: cover;
-    transition: transform 1.2s ease, opacity 1.2s ease, filter 1.2s ease;
-    transform-origin: center center;
+    transition: transform 1.2s ease, opacity 1s ease, filter 1s ease;
+    transform-origin: center;
+    display: block;
   }
 
-  /* Efecto de zoom dinámico mientras se desplaza */
-  .post.scroll-zoom img {
-    transform: scale(1.05);
-    opacity: 0.95;
-    filter: brightness(1.05);
+  /* 🎞️ Zoom + brillo al pasar el mouse */
+  .post img:hover {
+    transform: scale(1.08);
+    filter: brightness(1.1);
   }
 
   .info {
     padding: 15px;
     text-align: center;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
     transition: all 0.8s ease;
   }
 
@@ -80,6 +84,7 @@
   .info h2 {
     font-size: 20px;
     margin: 5px 0;
+    color: #111;
   }
 
   .price {
@@ -98,29 +103,38 @@
 
   .rating {
     color: #fbbf24;
+    font-size: 18px;
   }
 
   .buy-btn {
     display: inline-block;
     background: var(--accent);
     color: #fff;
-    padding: 10px 20px;
+    padding: 10px 25px;
     border-radius: 25px;
     text-decoration: none;
     font-weight: 600;
     margin-top: 10px;
-    transition: background 0.3s ease;
+    box-shadow: 0 5px 15px rgba(34,197,94,0.3);
+    transition: all 0.3s ease;
   }
 
   .buy-btn:hover {
     background: #16a34a;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(22,163,74,0.35);
   }
 
   footer {
     text-align: center;
-    padding: 20px;
+    padding: 25px;
     background: #1e293b;
     color: #fff;
+    font-size: 14px;
+  }
+
+  footer p {
+    margin: 5px 0;
   }
 </style>
 </head>
@@ -185,27 +199,14 @@ productos.forEach(prod => {
   feed.appendChild(post);
 });
 
-// 👁️ Efecto fade + deslizamiento suave al entrar
+// 👁️ Efecto fade + blur al entrar en pantalla
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) entry.target.classList.add("in-view");
   });
 }, { threshold: 0.2 });
 document.querySelectorAll(".post").forEach(p => observer.observe(p));
-
-// 🧠 Efecto dinámico de zoom al hacer scroll
-window.addEventListener("scroll", () => {
-  const posts = document.querySelectorAll(".post");
-  posts.forEach(post => {
-    const rect = post.getBoundingClientRect();
-    const middle = window.innerHeight / 2;
-    const visible = rect.top < middle && rect.bottom > middle;
-    if (visible) post.classList.add("scroll-zoom");
-    else post.classList.remove("scroll-zoom");
-  });
-});
 </script>
 
 </body>
 </html>
-
