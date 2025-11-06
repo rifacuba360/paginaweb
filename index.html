@@ -179,20 +179,22 @@ const productos = [
 ];
 
 const feed = document.getElementById("productFeed");
-  
+
 // -------------------------------
 // Crear productos dinámicamente
 productos.forEach((prod,i)=>{
-  const post=document.createElement("div");
-  post.className="post";
-  const stars="⭐".repeat(prod.rating)+"☆".repeat(5-prod.rating);
+  const post = document.createElement("div");
+  post.className = "post";
+  const stars = "⭐".repeat(prod.rating)+"☆".repeat(5-prod.rating);
 
-  // Carrusel tipo fade
+  // Carrusel tipo fade con fallback
   const carouselHtml = `
     <div class="carousel" id="carousel-${i}">
-      ${prod.fotos.map((f,idx)=>`<img src="${f}" class="${idx===0?'active':''}">`).join('')}
+      ${prod.fotos.map((f,idx)=>`
+        <img src="${f}" class="${idx===0?'active':''}" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Sin+imagen'">
+      `).join('')}
       ${prod.fotos.length>1?'<button class="prev">&#10094;</button><button class="next">&#10095;</button>':''}
-      ${prod.fotos.length>1?'<div class="photo-counter">1 / '+prod.fotos.length+'</div>':''}
+      ${prod.fotos.length>1?`<div class="photo-counter">1 / ${prod.fotos.length}</div>`:''}
     </div>
   `;
 
@@ -220,7 +222,7 @@ productos.forEach((prod,i)=>{
 
   const showImage = (index)=>{
     imgs.forEach((img,i)=> img.classList.toggle('active', i===index));
-    if(counter) counter.textContent = (index+1)+' / '+imgs.length;
+    if(counter) counter.textContent = `${index+1} / ${imgs.length}`;
   }
 
   if(prevBtn && nextBtn){
@@ -228,7 +230,7 @@ productos.forEach((prod,i)=>{
     nextBtn.addEventListener('click', ()=>{ current=(current+1)%imgs.length; showImage(current); });
   }
 
-  // Opcional: swipe táctil para móviles
+  // Swipe táctil
   let startX = 0;
   carousel.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; });
   carousel.addEventListener('touchend', e=>{
@@ -252,7 +254,3 @@ const cart = document.getElementById('cart');
 const cartContent = document.getElementById('cartContent');
 cart.addEventListener('click', ()=>{ cartContent.style.display = cartContent.style.display==='block'?'none':'block'; });
 </script>
-
-</body>
-</html>
-
