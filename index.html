@@ -3,37 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galería de Productos</title>
+<title>🛍️ Mi Tienda Online</title>
 <style>
   body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background: #f3f4f6;
+    background: #f8fafc;
   }
 
   h1 {
     text-align: center;
     margin: 20px 0;
-    color: #222;
+    color: #111;
   }
 
   .container {
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
   }
 
   .card {
     background: #fff;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     opacity: 0;
     transform: translateY(50px);
-    transition: all 0.7s ease;
+    transition: all 0.8s ease;
   }
 
   .card.in-view {
@@ -43,23 +43,23 @@
 
   .card img {
     width: 100%;
-    height: 230px;
+    height: 220px;
     object-fit: cover;
-    transition: transform 0.8s ease, opacity 0.8s ease;
+    transition: transform 0.4s ease;
   }
 
-  .card img.fade {
-    opacity: 0;
-    transform: translateY(-20px);
+  .card:hover img {
+    transform: scale(1.05);
   }
 
   .info {
     padding: 15px;
+    text-align: center;
   }
 
   .info h2 {
     font-size: 18px;
-    margin: 0 0 10px;
+    margin: 0 0 8px;
     color: #111;
   }
 
@@ -67,6 +67,11 @@
     color: #2563eb;
     font-weight: 600;
     font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .rating {
+    color: #fbbf24;
     margin-bottom: 10px;
   }
 
@@ -74,100 +79,112 @@
     color: #555;
     font-size: 14px;
     line-height: 1.4;
+    height: 40px;
+    overflow: hidden;
+  }
+
+  .buy-btn {
+    display: inline-block;
+    margin-top: 10px;
+    background: #22c55e;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s ease;
+  }
+
+  .buy-btn:hover {
+    background: #16a34a;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    background: #1e293b;
+    color: #fff;
+  }
+
+  footer p {
+    margin: 5px 0;
   }
 
   @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Efecto general tipo Facebook scroll */
-  .card.in-view {
-    animation: fadeInUp 0.8s ease forwards;
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 </style>
 </head>
 <body>
 
-<h1>🛍️ Galería de Productos</h1>
+<h1>🛒 Bienvenido a Mi Tienda</h1>
 <div class="container" id="productContainer"></div>
 
+<footer>
+  <p><strong>📍 Mi Tienda Online</strong></p>
+  <p>Dirección: Calle Principal #123, Ciudad</p>
+  <p>📱 WhatsApp: +5355555555</p>
+  <p>© 2025 Todos los derechos reservados</p>
+</footer>
+
 <script>
-// 💡 Aquí pones tus productos
-// Solo cambia las imágenes, nombres, precios y descripción fácilmente.
+// 💡 Agrega aquí tus productos
 const productos = [
   {
     imagen: "assets/reloj.jpg",
     nombre: "Reloj Digital",
-    precio: "$20.00",
-    descripcion: "Pantalla LED, resistente al agua y batería de larga duración."
+    precio: "$25.00",
+    descripcion: "Pantalla LED, resistente al agua, con correa ajustable.",
+    whatsapp: "5355555555",
+    rating: 5
   },
   {
     imagen: "assets/auriculares.jpg",
-    nombre: "assets/auriculares.jpg",
-    precio: "$40.00",
-    descripcion: "Reloj moderno con monitor cardíaco, pasos y conexión a tu teléfono."
+    nombre: "Auriculares Bluetooth",
+    precio: "$30.00",
+    descripcion: "Cancelación de ruido y conexión estable.",
+    whatsapp: "5355555555",
+    rating: 4
   },
   {
-    imagen: "assets/producto3.jpg",
-    nombre: "Cámara Deportiva",
-    precio: "$55.00",
-    descripcion: "Graba tus aventuras en HD, resistente al agua y con accesorios incluidos."
+    imagen: "assets/camara.jpg",
+    nombre: "Cámara Deportiva HD",
+    precio: "$60.00",
+    descripcion: "Graba tus aventuras en alta definición con accesorios incluidos.",
+    whatsapp: "5355555555",
+    rating: 5
   }
-  // 👉 Puedes agregar más productos copiando y pegando este formato
-  /*
-  ,
-  {
-    imagen: "assets/tuimagen.jpg",
-    nombre: "Nombre del producto",
-    precio: "$0.00",
-    descripcion: "Descripción del producto."
-  }
-  */
 ];
 
-// 👇 No toques el código de abajo (se encarga de mostrar todo bonito)
+// 🔧 Mostrar los productos
 const contenedor = document.getElementById('productContainer');
-
 productos.forEach(prod => {
   const card = document.createElement('div');
   card.className = 'card';
+  const stars = '⭐'.repeat(prod.rating) + '☆'.repeat(5 - prod.rating);
+  const whatsappLink = `https://wa.me/${prod.whatsapp}?text=Hola!%20Estoy%20interesado%20en%20el%20producto:%20${encodeURIComponent(prod.nombre)}`;
   card.innerHTML = `
     <img src="${prod.imagen}" alt="${prod.nombre}">
     <div class="info">
       <h2>${prod.nombre}</h2>
       <div class="price">${prod.precio}</div>
+      <div class="rating">${stars}</div>
       <div class="desc">${prod.descripcion}</div>
+      <a href="${whatsappLink}" target="_blank" class="buy-btn">Comprar</a>
     </div>
   `;
   contenedor.appendChild(card);
 });
 
-// Efecto de aparición al hacer scroll
+// ✨ Animación de entrada tipo scroll Facebook
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('in-view');
-    }
+    if (entry.isIntersecting) entry.target.classList.add('in-view');
   });
 });
 document.querySelectorAll('.card').forEach(c => observer.observe(c));
-
-// Efecto cambio (deslizamiento / fade) al pasar de una imagen a otra
-document.querySelectorAll('.card img').forEach(img => {
-  img.addEventListener('click', () => {
-    img.classList.add('fade');
-    setTimeout(() => {
-      img.classList.remove('fade');
-    }, 800);
-  });
-});
 </script>
 
 </body>
