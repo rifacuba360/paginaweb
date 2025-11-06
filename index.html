@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,7 +10,6 @@
     --card-bg: #fff;
     --accent: #22c55e;
     --shadow: 0 8px 30px rgba(0,0,0,0.1);
-    --duration: 800ms;
   }
 
   body {
@@ -39,12 +37,13 @@
     margin-bottom: 25px;
     box-shadow: var(--shadow);
     overflow: hidden;
-    transform: translateY(40px) scale(0.98);
+    transform: translateY(40px) scale(0.96);
     opacity: 0;
-    transition: all var(--duration) ease;
+    transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
     will-change: transform, opacity;
   }
 
+  /* ✨ Fade + Deslizamiento al entrar */
   .post.in-view {
     transform: translateY(0) scale(1);
     opacity: 1;
@@ -54,20 +53,22 @@
     width: 100%;
     height: 360px;
     object-fit: cover;
-    transition: transform 1.5s ease, opacity 1.5s ease, filter 1.5s ease;
+    transition: transform 1.2s ease, opacity 1.2s ease, filter 1.2s ease;
+    transform-origin: center center;
   }
 
-  .post.active img {
-    transform: scale(1.08);
-    filter: brightness(1.05);
+  /* Efecto de zoom dinámico mientras se desplaza */
+  .post.scroll-zoom img {
+    transform: scale(1.05);
     opacity: 0.95;
+    filter: brightness(1.05);
   }
 
   .info {
     padding: 15px;
     text-align: center;
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(20px);
     transition: all 0.8s ease;
   }
 
@@ -121,16 +122,6 @@
     background: #1e293b;
     color: #fff;
   }
-
-  /* ✨ Fade + Zoom al entrar */
-  @keyframes fadeZoom {
-    0% { transform: scale(0.9); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-
-  .fade-zoom {
-    animation: fadeZoom 1s ease forwards;
-  }
 </style>
 </head>
 <body>
@@ -146,7 +137,7 @@
 </footer>
 
 <script>
-// 🖼️ Productos (cambia los datos y fotos aquí)
+// 🖼️ Productos
 const productos = [
   {
     imagen: "activo/reloj.jpg",
@@ -174,7 +165,7 @@ const productos = [
   }
 ];
 
-// 🚀 Generar publicaciones tipo Facebook
+// 🚀 Generar publicaciones dinámicamente
 const feed = document.getElementById("productFeed");
 productos.forEach(prod => {
   const post = document.createElement("div");
@@ -194,26 +185,27 @@ productos.forEach(prod => {
   feed.appendChild(post);
 });
 
-// 🎬 Animación tipo muro Facebook + fade/zoom al aparecer
+// 👁️ Efecto fade + deslizamiento suave al entrar
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("in-view");
-      entry.target.querySelector("img").classList.add("fade-zoom");
-    }
+    if (entry.isIntersecting) entry.target.classList.add("in-view");
   });
-});
+}, { threshold: 0.2 });
 document.querySelectorAll(".post").forEach(p => observer.observe(p));
 
-// 🔁 Efecto automático: una publicación se agranda al azar mientras se hace scroll
-let activeIndex = 0;
-setInterval(() => {
-  const posts = document.querySelectorAll('.post');
-  posts.forEach(p => p.classList.remove('active'));
-  posts[activeIndex].classList.add('active');
-  activeIndex = (activeIndex + 1) % posts.length;
-}, 4000);
+// 🧠 Efecto dinámico de zoom al hacer scroll
+window.addEventListener("scroll", () => {
+  const posts = document.querySelectorAll(".post");
+  posts.forEach(post => {
+    const rect = post.getBoundingClientRect();
+    const middle = window.innerHeight / 2;
+    const visible = rect.top < middle && rect.bottom > middle;
+    if (visible) post.classList.add("scroll-zoom");
+    else post.classList.remove("scroll-zoom");
+  });
+});
 </script>
 
 </body>
 </html>
+
