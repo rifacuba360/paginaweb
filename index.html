@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🛍️ Mi Tienda </title>
+<title>🛍️ Mi Tienda</title>
 <style>
 :root {
   --bg: #121212;
@@ -13,7 +13,7 @@
   --text: #f3f4f6;
   --subtext: #9ca3af;
   --shadow: 0 10px 40px rgba(0,0,0,0.6);
-  --transition: all 0.7s ease; /* transición más rápida para carrusel */
+  --transition: all 0.7s ease;
 }
 
 body {
@@ -21,143 +21,68 @@ body {
   font-family:'Poppins', sans-serif;
   background: var(--bg);
   color: var(--text);
-  overflow-x:hidden;
 }
 
-/* -------------------------------
-   Pantalla de presentación
---------------------------------*/
-#intro {
-  position: fixed; top:0; left:0; width:100%; height:100%;
-  background:#f4f4f4;
-  display:flex; align-items:center; justify-content:center; flex-direction:column;
-  z-index:9999; transition: opacity 1s ease;
+/* Encabezado */
+h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; }
+
+/* Contenedor de productos */
+.feed { 
+  max-width:700px; 
+  margin:0 auto; 
+  padding:10px 15px 80px; 
 }
-#intro h1 { font-size:3rem; color:#111827; margin-bottom:20px; text-align:center; }
-#intro p { font-size:1.2rem; color:#111827; }
-#intro.fade-out { opacity:0; pointer-events:none; }
 
-/* -------------------------------
-   Títulos y feed
---------------------------------*/
-h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:var(--text); }
-.feed { max-width:700px; margin:0 auto; padding:10px 15px 80px; }
-
-/* -------------------------------
-   Productos
---------------------------------*/
+/* Tarjeta del producto */
 .post {
   background: var(--card-bg); 
   border-radius:18px; 
-  margin-bottom:50px; /* espacio entre productos */
+  margin-bottom:40px; 
   box-shadow: var(--shadow); 
   overflow:hidden; 
-  opacity:0;
-  transform: translateY(80px) scale(0.96); 
-  filter:blur(8px);
-  transition: all 0.7s ease; 
+  transition: all 0.6s ease;
 }
-.post.in-view { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
 
-/* -------------------------------
-   Carrusel tipo Facebook
---------------------------------*/
-.carousel { 
-  position: relative; 
-  overflow: hidden; 
-  cursor: pointer;
-}
+/* Imagen del producto */
 .carousel img { 
   width: 100%; 
-  height: 380px; 
+  height: 350px; 
   object-fit: cover; 
   display: block; 
-  position: absolute; 
-  top:0; left:0; 
-  opacity:0; 
-  transition: opacity 0.7s ease; /* efecto fade */
   border-radius:18px 18px 0 0;
 }
-.carousel img.active { opacity:1; } /* solo la foto activa se ve */
 
-.carousel .prev, .carousel .next {
-  position:absolute; top:50%; transform:translateY(-50%);
-  background: rgba(0,0,0,0.3); color:#fff; border:none; padding:12px;
-  border-radius:50%; cursor:pointer; font-size:22px; z-index:2; transition: background 0.3s ease, opacity 0.3s ease;
-  opacity:0; /* flechas ocultas por defecto */
+/* Información debajo de la imagen */
+.info { 
+  padding:20px; 
+  text-align:center; 
 }
-.carousel:hover .prev, .carousel:hover .next { opacity:1; } /* aparecen al pasar el mouse */
-.carousel .prev { left:50%; transform: translate(-150%, -50%); }
-.carousel .next { right:50%; transform: translate(150%, -50%); }
-
-/* contador fotos */
-.photo-counter {
-  position:absolute; bottom:10px; right:10px;
-  background: rgba(0,0,0,0.6); color:#fff; padding:5px 10px;
-  border-radius:12px; font-size:14px;
-}
-
-/* -------------------------------
-   Info del producto
---------------------------------*/
-.info { padding:25px; text-align:center; opacity:0; transform:translateY(30px); transition:all 0.8s ease; }
-.post.in-view .info { opacity:1; transform:translateY(0); }
 .info h2 { font-size:22px; margin:10px 0; color:var(--text); }
 .price { font-size:20px; color:#3b82f6; font-weight:600; margin:8px 0; }
 .desc { font-size:16px; color:var(--subtext); margin:12px 0; line-height:1.6; }
 .rating { color:#fbbf24; margin-bottom:10px; font-size:18px; }
 
-/* Botón de compra */
-.buy-btn { display:inline-block; background: var(--accent); color:#fff;
-  padding:12px 30px; border-radius:50px; font-weight:600; text-decoration:none;
-  box-shadow:0 6px 20px rgba(34,197,94,0.3); transition:all 0.4s ease; margin:5px;}
-.buy-btn:hover { background: var(--accent-dark); transform:scale(1.05);
-  box-shadow:0 8px 25px rgba(22,163,74,0.4); }
-
-/* -------------------------------
-   Footer
---------------------------------*/
-footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6; font-size:14px; }
-
-@media(max-width:600px){
-  .carousel img{height:250px;}
-  .info h2{font-size:18px;}
-  .price{font-size:16px;}
-  .desc{font-size:14px;}
+/* Botón de WhatsApp */
+.buy-btn { 
+  display:inline-block; 
+  background: var(--accent); 
+  color:#fff;
+  padding:12px 30px; 
+  border-radius:50px; 
+  font-weight:600; 
+  text-decoration:none;
+  transition: all 0.4s ease; 
 }
+.buy-btn:hover { background: var(--accent-dark); transform:scale(1.05); }
 
-/* -------------------------------
-   Carrito flotante
---------------------------------*/
-#cart { position: fixed; bottom:20px; right:20px;
-  background:var(--accent); color:#fff; width:60px; height:60px;
-  border-radius:50%; font-size:28px; display:flex; align-items:center; justify-content:center;
-  box-shadow:0 6px 20px rgba(34,197,94,0.3); cursor:pointer; transition:all 0.3s ease; z-index:10000; }
-#cart:hover { background: var(--accent-dark); transform: scale(1.1); }
-
-#cartContent {
-  position:fixed; bottom:90px; right:20px;
-  background: var(--card-bg); color: var(--text); padding:15px; border-radius:12px;
-  max-width:250px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); display:none; z-index:9999;
-}
-#cartContent h3 { margin-top:0; font-size:18px; }
-#cartContent p { margin:5px 0; font-size:14px; }
+/* Footer */
+footer { text-align:center; padding:25px 10px; background:#111827; color:#f3f4f6; font-size:14px; }
 </style>
 </head>
 <body>
 
-<div id="intro">
-  <h1>Bienvenido a Mi Tienda</h1>
-  <p>Descubre productos increíbles</p>
-</div>
-
-<h1>🛒 Productos de Mi Tienda</h1>
+<h1>🛒 Catálogo de Productos</h1>
 <div class="feed" id="productFeed"></div>
-
-<div id="cart">🛒</div>
-<div id="cartContent">
-  <h3>Tu Carrito</h3>
-</div>
 
 <footer>
   <p><strong>📍 Mi Tienda Online</strong></p>
@@ -166,12 +91,7 @@ footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6
 </footer>
 
 <script>
-// -------------------------------
-// Ocultar intro automáticamente
-setTimeout(()=>{ document.getElementById('intro').classList.add('fade-out'); },3000);
-
-// -------------------------------
-// Lista de productos
+// Productos
 const productos = [
   { 
     nombre: "⌚ Reloj Digital",
@@ -195,28 +115,17 @@ const productos = [
   }
 ];
 
-
 const feed = document.getElementById("productFeed");
-  
-// -------------------------------
-// Carrusel funcional tipo Facebook + Autoplay
-productos.forEach((prod,i)=>{
+
+productos.forEach(prod=>{
   const post = document.createElement("div");
   post.className = "post";
   const stars = "⭐".repeat(prod.rating)+"☆".repeat(5-prod.rating);
 
-  const carouselHtml = `
-    <div class="carousel" id="carousel-${i}">
-      ${prod.fotos.map((f,idx)=>`
-        <img src="${f}" class="${idx===0?'active':''}" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Sin+imagen'">
-      `).join('')}
-      ${prod.fotos.length>1?'<button class="prev">&#10094;</button><button class="next">&#10095;</button>':''}
-      ${prod.fotos.length>1?`<div class="photo-counter">1 / ${prod.fotos.length}</div>`:''}
-    </div>
-  `;
-
   post.innerHTML = `
-    ${carouselHtml}
+    <div class="carousel">
+      <img src="${prod.fotos[0]}" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300?text=Sin+imagen';">
+    </div>
     <div class="info">
       <h2>${prod.nombre}</h2>
       <div class="price">$${prod.precio}</div>
@@ -226,54 +135,8 @@ productos.forEach((prod,i)=>{
     </div>
   `;
   feed.appendChild(post);
-
-  const carousel = post.querySelector('.carousel');
-  const imgs = carousel.querySelectorAll('img');
-  let current = 0;
-  const counter = carousel.querySelector('.photo-counter');
-
-  const prevBtn = carousel.querySelector('.prev');
-  const nextBtn = carousel.querySelector('.next');
-
-  const showImage = (index)=>{
-    imgs.forEach((img,i)=> img.classList.toggle('active', i===index));
-    if(counter) counter.textContent = `${index+1} / ${imgs.length}`;
-  }
-
-  if(prevBtn && nextBtn){
-    prevBtn.addEventListener('click', ()=>{ current=(current-1+imgs.length)%imgs.length; showImage(current); });
-    nextBtn.addEventListener('click', ()=>{ current=(current+1)%imgs.length; showImage(current); });
-  }
-
-  // -------------------------------
-  // Autoplay: cambiar imagen cada 3 segundos
-  setInterval(()=>{
-    current = (current+1)%imgs.length;
-    showImage(current);
-  }, 3000);
-
-  // Swipe táctil
-  let startX = 0;
-  carousel.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; });
-  carousel.addEventListener('touchend', e=>{
-    let endX = e.changedTouches[0].clientX;
-    if(endX - startX > 50) current=(current-1+imgs.length)%imgs.length; 
-    else if(startX - endX > 50) current=(current+1)%imgs.length;
-    showImage(current);
-  });
 });
-
-
-// -------------------------------
-// Animación al entrar en pantalla
-const observer = new IntersectionObserver(entries=>{
-  entries.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add("in-view"); });
-},{threshold:0.25});
-document.querySelectorAll(".post").forEach(p=>observer.observe(p));
-
-// -------------------------------
-// Toggle carrito flotante
-const cart = document.getElementById('cart');
-const cartContent = document.getElementById('cartContent');
-cart.addEventListener('click', ()=>{ cartContent.style.display = cartContent.style.display==='block'?'none':'block'; });
 </script>
+
+</body>
+</html>
