@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🛍️ Mi Tienda Profesional - Dark Mode</title>
+<title>🛍️ Mi Tienda Profesional</title>
 <style>
   :root {
     --bg: #121212;
@@ -24,6 +24,38 @@
     overflow-x: hidden;
   }
 
+  /* Pantalla de presentación */
+  #intro {
+    position: fixed;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    background: #f4f4f4;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    z-index: 9999;
+    transition: opacity 1s ease;
+  }
+
+  #intro h1 {
+    font-size: 3rem;
+    color:#111827;
+    margin-bottom:20px;
+    text-align:center;
+  }
+
+  #intro p {
+    font-size:1.2rem;
+    color:#111827;
+  }
+
+  #intro.fade-out {
+    opacity:0;
+    pointer-events:none;
+  }
+
   h1 {
     text-align: center;
     margin: 30px 0;
@@ -32,244 +64,52 @@
     color: var(--text);
   }
 
-  .feed {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 10px 15px 50px;
-  }
+  .feed { max-width: 700px; margin: 0 auto; padding: 10px 15px 50px; }
 
-  .post {
-    background: var(--card-bg);
-    border-radius: 18px;
-    margin-bottom: 30px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(80px) scale(0.96);
-    filter: blur(8px);
-    transition: var(--transition);
-    will-change: transform, opacity, filter;
-  }
+  .post { background: var(--card-bg); border-radius: 18px; margin-bottom: 30px;
+    box-shadow: var(--shadow); overflow: hidden; opacity: 0;
+    transform: translateY(80px) scale(0.96); filter: blur(8px);
+    transition: var(--transition); will-change: transform, opacity, filter; }
 
-  .post.in-view {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
+  .post.in-view { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 
-  /* Carrusel de imágenes */
-  .carousel {
-    position: relative;
-    overflow: hidden;
-  }
+  .carousel { position: relative; overflow: hidden; }
+  .carousel img { width: 100%; height: 380px; object-fit: cover;
+    transition: transform 1s ease, filter 0.8s ease; transform-origin: center;
+    display: block; border-radius: 18px 18px 0 0; }
+  .carousel img:hover { transform: scale(1.08); filter: brightness(1.1); }
+  .carousel .prev, .carousel .next { position:absolute; top:50%; transform:translateY(-50%);
+    background: rgba(0,0,0,0.3); color: #fff; border:none; padding:10px; border-radius:50%;
+    cursor:pointer; font-size:22px; z-index:2; transition: background 0.3s ease; }
+  .carousel .prev:hover, .carousel .next:hover { background: rgba(0,0,0,0.6); }
+  .carousel .prev { left: 10px; } .carousel .next { right:10px; }
 
-  .carousel img {
-    width: 100%;
-    height: 380px;
-    object-fit: cover;
-    transition: transform 1s ease, filter 0.8s ease;
-    transform-origin: center;
-    display: block;
-    border-radius: 18px 18px 0 0;
-  }
+  .info { padding:20px; text-align:center; opacity:0; transform:translateY(30px); transition:all 0.8s ease;}
+  .post.in-view .info { opacity:1; transform:translateY(0); }
+  .info h2 { font-size:22px; margin:10px 0; color: var(--text); }
+  .price { font-size:19px; color:#3b82f6; font-weight:600; margin:8px 0; }
+  .desc { font-size:15px; color: var(--subtext); margin:10px 0; line-height:1.6; }
+  .rating { color:#fbbf24; margin-bottom:10px; font-size:18px; }
+  .buy-btn { display:inline-block; background: var(--accent); color:#fff;
+    padding:12px 30px; border-radius:50px; font-weight:600; text-decoration:none;
+    box-shadow:0 6px 20px rgba(34,197,94,0.3); transition:all 0.4s ease; margin:5px;}
+  .buy-btn:hover { background: var(--accent-dark); transform:scale(1.05);
+    box-shadow:0 8px 25px rgba(22,163,74,0.4); }
 
-  .carousel img:hover {
-    transform: scale(1.08);
-    filter: brightness(1.1);
-  }
-
-  .carousel .prev, .carousel .next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.3);
-    color: #fff;
-    border: none;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 22px;
-    z-index: 2;
-    transition: background 0.3s ease;
-  }
-
-  .carousel .prev:hover, .carousel .next:hover {
-    background: rgba(0,0,0,0.6);
-  }
-
-  .carousel .prev { left: 10px; }
-  .carousel .next { right: 10px; }
-
-  .info {
-    padding: 20px;
-    text-align: center;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease;
-  }
-
-  .post.in-view .info {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .info h2 {
-    font-size: 22px;
-    margin: 10px 0;
-    color: var(--text);
-  }
-
-  .price {
-    font-size: 19px;
-    color: #3b82f6;
-    font-weight: 600;
-    margin: 8px 0;
-  }
-
-  .desc {
-    font-size: 15px;
-    color: var(--subtext);
-    margin: 10px 0;
-    line-height: 1.6;
-  }
-
-  .rating {
-    color: #fbbf24;
-    margin-bottom: 10px;
-    font-size: 18px;
-  }
-
-  .buy-btn, .add-cart-btn {
-    display: inline-block;
-    background: var(--accent);
-    color: #fff;
-    padding: 12px 30px;
-    border-radius: 50px;
-    font-weight: 600;
-    text-decoration: none;
-    box-shadow: 0 6px 20px rgba(34,197,94,0.3);
-    transition: all 0.4s ease;
-    margin: 5px;
-    cursor: pointer;
-  }
-
-  .buy-btn:hover, .add-cart-btn:hover {
-    background: var(--accent-dark);
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(22,163,74,0.4);
-  }
-
-  /* Carrito */
-  .cart {
-    position: fixed;
-    top: 0;
-    right: -350px;
-    width: 350px;
-    height: 100%;
-    background: var(--card-bg);
-    box-shadow: -5px 0 25px rgba(0,0,0,0.5);
-    transition: right 0.5s ease;
-    padding: 20px;
-    z-index: 999;
-    overflow-y: auto;
-  }
-
-  .cart.open { right: 0; }
-
-  .cart h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--text);
-  }
-
-  .cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 10px;
-  }
-
-  .cart-item img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-
-  .cart-item-details {
-    flex: 1;
-    margin-left: 10px;
-  }
-
-  .cart-item-details h4 {
-    margin: 0;
-    font-size: 16px;
-    color: var(--text);
-  }
-
-  .cart-item-details span {
-    font-size: 14px;
-    color: var(--subtext);
-  }
-
-  .cart-total {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .cart-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: var(--accent);
-    color: #fff;
-    padding: 12px 18px;
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 6px 20px rgba(34,197,94,0.3);
-    transition: all 0.3s ease;
-  }
-
-  .cart-toggle:hover {
-    background: var(--accent-dark);
-    transform: scale(1.05);
-  }
-
-  footer {
-    text-align: center;
-    padding: 35px 10px;
-    background: #111827;
-    color: #f3f4f6;
-    font-size: 14px;
-  }
-
-  @media (max-width: 600px) {
-    .carousel img { height: 250px; }
-    .info h2 { font-size: 18px; }
-    .price { font-size: 16px; }
-    .cart { width: 90%; }
-  }
+  footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6; font-size:14px; }
+  @media(max-width:600px){ .carousel img{height:250px;} .info h2{font-size:18px;} .price{font-size:16px;} }
 </style>
 </head>
 <body>
 
+<!-- Pantalla de presentación -->
+<div id="intro">
+  <h1>Bienvenido a Mi Tienda</h1>
+  <p>Descubre productos increíbles</p>
+</div>
+
 <h1>🛒 Productos de Mi Tienda</h1>
 <div class="feed" id="productFeed"></div>
-
-<button class="cart-toggle" id="cartToggle">🛒 Carrito (<span id="cartCount">0</span>)</button>
-
-<div class="cart" id="cart">
-  <h2>Mi Carrito</h2>
-  <div id="cartItems"></div>
-  <div class="cart-total" id="cartTotal">Total: $0</div>
-</div>
 
 <footer>
   <p><strong>📍 Mi Tienda Online</strong></p>
@@ -278,72 +118,61 @@
 </footer>
 
 <script>
+// Mostrar intro y ocultar después de 3s
+setTimeout(()=>{ document.getElementById('intro').classList.add('fade-out'); },3000);
+
 // Productos
 const productos = [
-  { nombre: "⌚ Reloj Digital", precio: 25, descripcion: "Pantalla LED, resistente al agua y diseño elegante.", whatsapp: "5355555555", rating: 5, fotos: ["activo/reloj.jpg","activo/reloj2.jpg","activo/reloj3.jpg"] },
-  { nombre: "🎧 Auriculares Bluetooth", precio: 30, descripcion: "Cancelación de ruido, conexión estable y carga rápida.", whatsapp: "5355555555", rating: 4, fotos: ["activo/auriculares.jpg","activo/auriculares2.jpg"] },
-  { nombre: "📷 Cámara Deportiva HD", precio: 60, descripcion: "Graba tus aventuras en alta definición con accesorios incluidos.", whatsapp: "5355555555", rating: 5, fotos: ["activo/camara.jpg","activo/camara2.jpg","activo/camara3.jpg"] }
+  { nombre: "⌚ Reloj Digital", precio:25, descripcion:"Pantalla LED, resistente al agua y diseño elegante.", whatsapp:"5355555555", rating:5, fotos:["activo/reloj.jpg","activo/reloj2.jpg","activo/reloj3.jpg"] },
+  { nombre: "🎧 Auriculares Bluetooth", precio:30, descripcion:"Cancelación de ruido, conexión estable y carga rápida.", whatsapp:"5355555555", rating:4, fotos:["activo/auriculares.jpg","activo/auriculares2.jpg"] },
+  { nombre: "📷 Cámara Deportiva HD", precio:60, descripcion:"Graba tus aventuras en alta definición con accesorios incluidos.", whatsapp:"5355555555", rating:5, fotos:["activo/camara.jpg","activo/camara2.jpg","activo/camara3.jpg"] }
 ];
 
 const feed = document.getElementById("productFeed");
-let cart = [];
-const cartItems = document.getElementById('cartItems');
-const cartCount = document.getElementById('cartCount');
-const cartTotal = document.getElementById('cartTotal');
 
-// Crear posts
-productos.forEach((prod, i) => {
-  const post = document.createElement("div");
-  post.className = "post";
-
-  const stars = "⭐".repeat(prod.rating) + "☆".repeat(5 - prod.rating);
+// Crear productos
+productos.forEach((prod,i)=>{
+  const post=document.createElement("div");
+  post.className="post";
+  const stars="⭐".repeat(prod.rating)+"☆".repeat(5-prod.rating);
 
   const carouselHtml = `
     <div class="carousel" id="carousel-${i}">
-      ${prod.fotos.map((f, idx) => `<img src="${f}" style="${idx===0?'':'display:none;'}">`).join('')}
+      ${prod.fotos.map((f,idx)=>`<img src="${f}" style="${idx===0?'':'display:none;'}">`).join('')}
       ${prod.fotos.length>1?'<button class="prev">&#10094;</button><button class="next">&#10095;</button>':''}
     </div>
   `;
 
-  post.innerHTML = `
+  post.innerHTML=`
     ${carouselHtml}
     <div class="info">
       <h2>${prod.nombre}</h2>
       <div class="price">$${prod.precio}</div>
       <div class="rating">${stars}</div>
       <div class="desc">${prod.descripcion}</div>
-      <button class="add-cart-btn">🛒 Agregar al carrito</button>
+      <a href="https://wa.me/${prod.whatsapp}?text=Hola!%20Estoy%20interesado%20en%20${encodeURIComponent(prod.nombre)}" target="_blank" class="buy-btn">💬 Comprar por WhatsApp</a>
     </div>
   `;
-
   feed.appendChild(post);
 
-  // Carrusel funcional
+  // Carrusel
   const carousel = post.querySelector('.carousel');
   const imgs = carousel.querySelectorAll('img');
-  let current = 0;
-  const prevBtn = carousel.querySelector('.prev');
-  const nextBtn = carousel.querySelector('.next');
+  let current =0;
+  const prevBtn=carousel.querySelector('.prev');
+  const nextBtn=carousel.querySelector('.next');
   if(prevBtn && nextBtn){
-    prevBtn.addEventListener('click', () => {
-      imgs[current].style.display = "none";
-      current = (current - 1 + imgs.length) % imgs.length;
-      imgs[current].style.display = "block";
+    prevBtn.addEventListener('click',()=>{
+      imgs[current].style.display="none";
+      current=(current-1+imgs.length)%imgs.length;
+      imgs[current].style.display="block";
     });
-    nextBtn.addEventListener('click', () => {
-      imgs[current].style.display = "none";
-      current = (current + 1) % imgs.length;
-      imgs[current].style.display = "block";
+    nextBtn.addEventListener('click',()=>{
+      imgs[current].style.display="none";
+      current=(current+1)%imgs.length;
+      imgs[current].style.display="block";
     });
   }
-
-  // Agregar al carrito
-  const addBtn = post.querySelector('.add-cart-btn');
-  addBtn.addEventListener('click', () => {
-    const existing = cart.find(item => item.nombre === prod.nombre);
-    if(existing){ existing.cantidad++; } else { cart.push({...prod, cantidad:1}); }
-    updateCart();
-  });
 });
 
 // Animaciones fade + slide
@@ -353,34 +182,7 @@ const observer = new IntersectionObserver(entries=>{
   });
 },{threshold:0.25});
 document.querySelectorAll(".post").forEach(p=>observer.observe(p));
-
-// Carrito toggle
-const cartEl = document.getElementById('cart');
-document.getElementById('cartToggle').addEventListener('click', () => {
-  cartEl.classList.toggle('open');
-});
-
-function updateCart(){
-  cartItems.innerHTML = '';
-  let total = 0;
-  cart.forEach(item=>{
-    total += item.precio * item.cantidad;
-    cartItems.innerHTML += `
-      <div class="cart-item">
-        <img src="${item.fotos[0]}">
-        <div class="cart-item-details">
-          <h4>${item.nombre}</h4>
-          <span>$${item.precio} x ${item.cantidad}</span>
-        </div>
-      </div>
-    `;
-  });
-  cartCount.textContent = cart.reduce((a,b)=>a+b.cantidad,0);
-  cartTotal.textContent = `Total: $${total}`;
-}
 </script>
 
 </body>
 </html>
-
-
