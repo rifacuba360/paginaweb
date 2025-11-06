@@ -5,104 +5,112 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🛍️ Mi Tienda Profesional</title>
 <style>
-  :root {
-    --bg: #121212;
-    --card-bg: #1e1e1e;
-    --accent: #22c55e;
-    --accent-dark: #16a34a;
-    --text: #f3f4f6;
-    --subtext: #9ca3af;
-    --shadow: 0 10px 40px rgba(0,0,0,0.6);
-    --transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-  }
+:root {
+  --bg: #121212;
+  --card-bg: #1e1e1e;
+  --accent: #22c55e;
+  --accent-dark: #16a34a;
+  --text: #f3f4f6;
+  --subtext: #9ca3af;
+  --shadow: 0 10px 40px rgba(0,0,0,0.6);
+  --transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
 
-  body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    overflow-x: hidden;
-  }
+body {
+  margin:0;
+  font-family:'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x:hidden;
+}
 
-  /* Pantalla de presentación */
-  #intro {
-    position: fixed;
-    top:0; left:0;
-    width:100%;
-    height:100%;
-    background: #f4f4f4;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    z-index: 9999;
-    transition: opacity 1s ease;
-  }
+/* Pantalla de presentación */
+#intro {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  background:#f4f4f4;
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  z-index:9999; transition: opacity 1s ease;
+}
+#intro h1 { font-size:3rem; color:#111827; margin-bottom:20px; text-align:center; }
+#intro p { font-size:1.2rem; color:#111827; }
+#intro.fade-out { opacity:0; pointer-events:none; }
 
-  #intro h1 {
-    font-size: 3rem;
-    color:#111827;
-    margin-bottom:20px;
-    text-align:center;
-  }
+/* Títulos y feed */
+h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:var(--text); }
+.feed { max-width:700px; margin:0 auto; padding:10px 15px 50px; }
 
-  #intro p {
-    font-size:1.2rem;
-    color:#111827;
-  }
+/* Productos */
+.post {
+  background: var(--card-bg); border-radius:18px; margin-bottom:30px;
+  box-shadow: var(--shadow); overflow:hidden; opacity:0;
+  transform: translateY(80px) scale(0.96); filter:blur(8px);
+  transition: var(--transition); will-change: transform, opacity, filter;
+}
+.post.in-view { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
 
-  #intro.fade-out {
-    opacity:0;
-    pointer-events:none;
-  }
+/* Carrusel de imágenes */
+.carousel { position: relative; overflow: hidden; }
+.carousel img { width: 100%; height: auto; max-height: 380px; object-fit: cover;
+  transition: transform 1s ease, filter 0.8s ease; transform-origin:center;
+  display:block; border-radius:18px 18px 0 0; }
+.carousel img:hover { transform:scale(1.08); filter: brightness(1.1); }
 
-  h1 {
-    text-align: center;
-    margin: 30px 0;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text);
-  }
+.carousel .prev, .carousel .next {
+  position:absolute; top:50%; transform:translateY(-50%);
+  background: rgba(0,0,0,0.3); color:#fff; border:none; padding:10px;
+  border-radius:50%; cursor:pointer; font-size:22px; z-index:2; transition: background 0.3s ease;
+}
+.carousel .prev:hover, .carousel .next:hover { background: rgba(0,0,0,0.6); }
+.carousel .prev { left:10px; } .carousel .next { right:10px; }
 
-  .feed { max-width: 700px; margin: 0 auto; padding: 10px 15px 50px; }
+/* Indicador de número de foto */
+.photo-counter {
+  position:absolute; bottom:10px; right:10px;
+  background: rgba(0,0,0,0.6); color:#fff; padding:5px 10px;
+  border-radius:12px; font-size:14px;
+}
 
-  .post { background: var(--card-bg); border-radius: 18px; margin-bottom: 30px;
-    box-shadow: var(--shadow); overflow: hidden; opacity: 0;
-    transform: translateY(80px) scale(0.96); filter: blur(8px);
-    transition: var(--transition); will-change: transform, opacity, filter; }
+/* Info del producto */
+.info { padding:20px; text-align:center; opacity:0; transform:translateY(30px); transition:all 0.8s ease; }
+.post.in-view .info { opacity:1; transform:translateY(0); }
+.info h2 { font-size:22px; margin:10px 0; color:var(--text); }
+.price { font-size:19px; color:#3b82f6; font-weight:600; margin:8px 0; }
+.desc { font-size:15px; color:var(--subtext); margin:10px 0; line-height:1.6; }
+.rating { color:#fbbf24; margin-bottom:10px; font-size:18px; }
 
-  .post.in-view { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+/* Botón de compra */
+.buy-btn { display:inline-block; background: var(--accent); color:#fff;
+  padding:12px 30px; border-radius:50px; font-weight:600; text-decoration:none;
+  box-shadow:0 6px 20px rgba(34,197,94,0.3); transition:all 0.4s ease; margin:5px;}
+.buy-btn:hover { background: var(--accent-dark); transform:scale(1.05);
+  box-shadow:0 8px 25px rgba(22,163,74,0.4); }
 
-  .carousel { position: relative; overflow: hidden; }
-  .carousel img { width: 100%; height: 380px; object-fit: cover;
-    transition: transform 1s ease, filter 0.8s ease; transform-origin: center;
-    display: block; border-radius: 18px 18px 0 0; }
-  .carousel img:hover { transform: scale(1.08); filter: brightness(1.1); }
-  .carousel .prev, .carousel .next { position:absolute; top:50%; transform:translateY(-50%);
-    background: rgba(0,0,0,0.3); color: #fff; border:none; padding:10px; border-radius:50%;
-    cursor:pointer; font-size:22px; z-index:2; transition: background 0.3s ease; }
-  .carousel .prev:hover, .carousel .next:hover { background: rgba(0,0,0,0.6); }
-  .carousel .prev { left: 10px; } .carousel .next { right:10px; }
+footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6; font-size:14px; }
 
-  .info { padding:20px; text-align:center; opacity:0; transform:translateY(30px); transition:all 0.8s ease;}
-  .post.in-view .info { opacity:1; transform:translateY(0); }
-  .info h2 { font-size:22px; margin:10px 0; color: var(--text); }
-  .price { font-size:19px; color:#3b82f6; font-weight:600; margin:8px 0; }
-  .desc { font-size:15px; color: var(--subtext); margin:10px 0; line-height:1.6; }
-  .rating { color:#fbbf24; margin-bottom:10px; font-size:18px; }
-  .buy-btn { display:inline-block; background: var(--accent); color:#fff;
-    padding:12px 30px; border-radius:50px; font-weight:600; text-decoration:none;
-    box-shadow:0 6px 20px rgba(34,197,94,0.3); transition:all 0.4s ease; margin:5px;}
-  .buy-btn:hover { background: var(--accent-dark); transform:scale(1.05);
-    box-shadow:0 8px 25px rgba(22,163,74,0.4); }
+@media(max-width:600px){
+  .carousel img{height:250px;}
+  .info h2{font-size:18px;}
+  .price{font-size:16px;}
+}
 
-  footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6; font-size:14px; }
-  @media(max-width:600px){ .carousel img{height:250px;} .info h2{font-size:18px;} .price{font-size:16px;} }
+/* Carrito flotante */
+#cart { position: fixed; top:50%; right:20px; transform:translateY(-50%);
+  background:var(--accent); color:#fff; width:60px; height:60px;
+  border-radius:50%; font-size:28px; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 20px rgba(34,197,94,0.3); cursor:pointer; transition:all 0.3s ease; z-index:10000; }
+#cart:hover { background: var(--accent-dark); transform: scale(1.1); }
+
+#cartContent {
+  position:fixed; top:50%; right:90px; transform:translateY(-50%);
+  background: var(--card-bg); color: var(--text); padding:15px; border-radius:12px;
+  max-width:250px; box-shadow: var(--shadow); display:none; z-index:9999;
+}
+#cartContent h3 { margin-top:0; font-size:18px; }
+#cartContent p { margin:5px 0; font-size:14px; }
 </style>
 </head>
 <body>
 
-<!-- Pantalla de presentación -->
 <div id="intro">
   <h1>Bienvenido a Mi Tienda</h1>
   <p>Descubre productos increíbles</p>
@@ -111,6 +119,11 @@
 <h1>🛒 Productos de Mi Tienda</h1>
 <div class="feed" id="productFeed"></div>
 
+<div id="cart">🛒</div>
+<div id="cartContent">
+  <h3>Tu Carrito</h3>
+</div>
+
 <footer>
   <p><strong>📍 Mi Tienda Online</strong></p>
   <p>WhatsApp: +5355555555</p>
@@ -118,7 +131,7 @@
 </footer>
 
 <script>
-// Mostrar intro y ocultar después de 3s
+// Ocultar intro
 setTimeout(()=>{ document.getElementById('intro').classList.add('fade-out'); },3000);
 
 // Productos
@@ -130,20 +143,21 @@ const productos = [
 
 const feed = document.getElementById("productFeed");
 
-// Crear productos
 productos.forEach((prod,i)=>{
   const post=document.createElement("div");
   post.className="post";
   const stars="⭐".repeat(prod.rating)+"☆".repeat(5-prod.rating);
 
+  // Carrusel HTML con contador
   const carouselHtml = `
     <div class="carousel" id="carousel-${i}">
       ${prod.fotos.map((f,idx)=>`<img src="${f}" style="${idx===0?'':'display:none;'}">`).join('')}
       ${prod.fotos.length>1?'<button class="prev">&#10094;</button><button class="next">&#10095;</button>':''}
+      ${prod.fotos.length>1?'<div class="photo-counter">1 / '+prod.fotos.length+'</div>':''}
     </div>
   `;
 
-  post.innerHTML=`
+  post.innerHTML = `
     ${carouselHtml}
     <div class="info">
       <h2>${prod.nombre}</h2>
@@ -158,31 +172,43 @@ productos.forEach((prod,i)=>{
   // Carrusel
   const carousel = post.querySelector('.carousel');
   const imgs = carousel.querySelectorAll('img');
-  let current =0;
-  const prevBtn=carousel.querySelector('.prev');
-  const nextBtn=carousel.querySelector('.next');
+  let current = 0;
+  const counter = carousel.querySelector('.photo-counter');
+
+  const prevBtn = carousel.querySelector('.prev');
+  const nextBtn = carousel.querySelector('.next');
   if(prevBtn && nextBtn){
-    prevBtn.addEventListener('click',()=>{
-      imgs[current].style.display="none";
-      current=(current-1+imgs.length)%imgs.length;
-      imgs[current].style.display="block";
+    prevBtn.addEventListener('click', ()=>{
+      imgs[current].style.display='none';
+      current = (current -1 + imgs.length) % imgs.length;
+      imgs[current].style.display='block';
+      counter.textContent = (current+1)+' / '+imgs.length;
     });
-    nextBtn.addEventListener('click',()=>{
-      imgs[current].style.display="none";
-      current=(current+1)%imgs.length;
-      imgs[current].style.display="block";
+    nextBtn.addEventListener('click', ()=>{
+      imgs[current].style.display='none';
+      current = (current +1) % imgs.length;
+      imgs[current].style.display='block';
+      counter.textContent = (current+1)+' / '+imgs.length;
     });
   }
 });
 
-// Animaciones fade + slide
+// Animación fade+slide al aparecer
 const observer = new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting) entry.target.classList.add("in-view");
   });
 },{threshold:0.25});
 document.querySelectorAll(".post").forEach(p=>observer.observe(p));
+
+// Carrito flotante toggle
+const cart = document.getElementById('cart');
+const cartContent = document.getElementById('cartContent');
+cart.addEventListener('click', ()=>{
+  cartContent.style.display = cartContent.style.display==='block'?'none':'block';
+});
 </script>
 
 </body>
 </html>
+
