@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,6 +10,7 @@
     margin: 0;
     font-family: 'Poppins', sans-serif;
     background: #f0f2f5;
+    overflow-x: hidden;
   }
 
   h1 {
@@ -43,10 +45,25 @@
     width: 100%;
     height: 360px;
     object-fit: cover;
+    transition: transform 1.5s ease, opacity 1.5s ease;
+  }
+
+  .post:hover img {
+    transform: scale(1.1);
+    opacity: 0.9;
   }
 
   .info {
     padding: 15px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease;
+  }
+
+  .post.in-view .info {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .info h2 {
@@ -81,6 +98,7 @@
     text-decoration: none;
     font-weight: 600;
     margin-top: 10px;
+    transition: background 0.3s ease;
   }
 
   .buy-btn:hover {
@@ -92,6 +110,16 @@
     padding: 20px;
     background: #1e293b;
     color: #fff;
+  }
+
+  /* ✨ Animación suave tipo desvanecer */
+  @keyframes fadeZoom {
+    0% { transform: scale(1) translateY(20px); opacity: 0; }
+    100% { transform: scale(1.05) translateY(0); opacity: 1; }
+  }
+
+  .fade-zoom {
+    animation: fadeZoom 1.5s ease forwards;
   }
 </style>
 </head>
@@ -108,10 +136,10 @@
 </footer>
 
 <script>
-// 🖼️ Agrega tus productos aquí
+// 🖼️ Productos (usa tus imágenes de la carpeta activo/)
 const productos = [
   {
-    imagen: "assets/reloj.jpg",
+    imagen: "activo/reloj.jpg",
     nombre: "⌚ Reloj Digital",
     precio: "$25.00",
     descripcion: "Pantalla LED, resistente al agua y diseño elegante.",
@@ -119,7 +147,7 @@ const productos = [
     rating: 5
   },
   {
-    imagen: "assets/auriculares.jpg",
+    imagen: "activo/auriculares.jpg",
     nombre: "🎧 Auriculares Bluetooth",
     precio: "$30.00",
     descripcion: "Cancelación de ruido y conexión estable.",
@@ -127,7 +155,7 @@ const productos = [
     rating: 4
   },
   {
-    imagen: "assets/camara.jpg",
+    imagen: "activo/camara.jpg",
     nombre: "📷 Cámara Deportiva HD",
     precio: "$60.00",
     descripcion: "Graba tus aventuras en alta definición con accesorios incluidos.",
@@ -156,10 +184,13 @@ productos.forEach(prod => {
   feed.appendChild(post);
 });
 
-// 🎬 Animación de entrada tipo muro Facebook
+// 🎬 Animación tipo muro Facebook + fade/zoom al aparecer
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add("in-view");
+    if (entry.isIntersecting) {
+      entry.target.classList.add("in-view");
+      entry.target.querySelector("img").classList.add("fade-zoom");
+    }
   });
 });
 document.querySelectorAll(".post").forEach(p => observer.observe(p));
@@ -167,4 +198,3 @@ document.querySelectorAll(".post").forEach(p => observer.observe(p));
 
 </body>
 </html>
-
