@@ -200,6 +200,70 @@ const observer=new IntersectionObserver(entries=>{
 },{threshold:0.25});
 document.querySelectorAll(".post").forEach(p=>observer.observe(p));
 
+/* Estilo carrito */
+#cart { 
+  position: fixed; 
+  bottom:20px; 
+  right:20px;
+  background:var(--accent); 
+  color:#fff; 
+  width:60px; 
+  height:60px;
+  border-radius:50%; 
+  font-size:28px; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center;
+  box-shadow:0 6px 20px rgba(34,197,94,0.3); 
+  cursor:pointer; 
+  transition:all 0.3s ease; 
+  z-index:10000; 
+}
+#cart:hover { 
+  background: var(--accent-dark); 
+  transform: scale(1.1); 
+}
+
+#cartContent {
+  position:fixed; 
+  bottom:90px; 
+  right:20px;
+  background: var(--card-bg); 
+  color: var(--text); 
+  padding:15px; 
+  border-radius:12px;
+  max-width:250px; 
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
+  display:none; 
+  z-index:9999;
+}
+#cartContent h3 { margin-top:0; font-size:18px; text-align:center; }
+#cartContent ul { list-style: none; padding:0; margin:0; }
+#cartContent li { margin:8px 0; display:flex; justify-content:space-between; }
+#cartContent li span { font-weight:600; }
+</style>
+</head>
+<body>
+
+<h1>🛒 Productos de Mi Tienda</h1>
+
+<!-- Carrito -->
+<div id="cart">🛒</div>
+<div id="cartContent">
+  <h3>Tu Carrito</h3>
+  <ul id="cartItems">
+    <!-- Aquí se agregan los productos -->
+  </ul>
+</div>
+
+<script>
+// Productos de ejemplo
+const productos = [
+  { nombre: "⌚ Reloj Digital", precio: 25 },
+  { nombre: "🎧 Auriculares Bluetooth", precio: 40 },
+  { nombre: "📱 Smartphone XYZ", precio: 350 }
+];
+
 // Carrito
 const cart = document.getElementById('cart');
 const cartContent = document.getElementById('cartContent');
