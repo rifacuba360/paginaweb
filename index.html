@@ -181,13 +181,12 @@ const productos = [
 const feed = document.getElementById("productFeed");
 
 // -------------------------------
-// Crear productos dinámicamente
+// Carrusel funcional tipo Facebook + Autoplay
 productos.forEach((prod,i)=>{
   const post = document.createElement("div");
   post.className = "post";
   const stars = "⭐".repeat(prod.rating)+"☆".repeat(5-prod.rating);
 
-  // Carrusel tipo fade con fallback
   const carouselHtml = `
     <div class="carousel" id="carousel-${i}">
       ${prod.fotos.map((f,idx)=>`
@@ -210,8 +209,6 @@ productos.forEach((prod,i)=>{
   `;
   feed.appendChild(post);
 
-  // -------------------------------
-  // Carrusel funcional tipo Facebook
   const carousel = post.querySelector('.carousel');
   const imgs = carousel.querySelectorAll('img');
   let current = 0;
@@ -230,6 +227,13 @@ productos.forEach((prod,i)=>{
     nextBtn.addEventListener('click', ()=>{ current=(current+1)%imgs.length; showImage(current); });
   }
 
+  // -------------------------------
+  // Autoplay: cambiar imagen cada 3 segundos
+  setInterval(()=>{
+    current = (current+1)%imgs.length;
+    showImage(current);
+  }, 3000);
+
   // Swipe táctil
   let startX = 0;
   carousel.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; });
@@ -240,6 +244,7 @@ productos.forEach((prod,i)=>{
     showImage(current);
   });
 });
+
 
 // -------------------------------
 // Animación al entrar en pantalla
