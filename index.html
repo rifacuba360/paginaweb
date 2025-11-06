@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🛍️ Mi Tienda</title>
-
-<!-- ✅ Favicon -->
+<title>🛍️ Catálogo Online</title>
 <link rel="icon" href="https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/reloj.png" type="image/png">
 
 <style>
@@ -28,17 +26,6 @@ body {
   overflow-x:hidden;
 }
 
-/* Intro */
-#intro {
-  position: fixed; top:0; left:0; width:100%; height:100%;
-  background:#f4f4f4;
-  display:flex; align-items:center; justify-content:center; flex-direction:column;
-  z-index:9999; transition: opacity 1s ease;
-}
-#intro h1 { font-size:3rem; color:#111827; margin-bottom:20px; text-align:center; }
-#intro p { font-size:1.2rem; color:#111827; }
-#intro.fade-out { opacity:0; pointer-events:none; }
-
 h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:var(--text); }
 .feed { max-width:700px; margin:0 auto; padding:10px 15px 80px; }
 
@@ -55,25 +42,29 @@ h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:va
 }
 .post.in-view { opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
 
-.carousel { position: relative; overflow: hidden; cursor: pointer; }
+/* ✅ CARRUSEL */
+.carousel { 
+  position: relative; 
+  overflow: hidden; 
+  cursor: pointer;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px; /* Espacio entre imagen y descripción */
+}
+
 .carousel img { 
-  width: 100%; height: 380px; object-fit: cover;
-  display: block; position: absolute; top:0; left:0;
-  opacity:0; transition: opacity 0.7s ease;
+  width: 100%; 
+  height: auto; 
+  object-fit: cover;
+  display: none; /* Oculta todas */
   border-radius:18px 18px 0 0;
 }
-.carousel img.active { opacity:1; }
 
-.carousel .prev, .carousel .next {
-  position:absolute; top:50%; transform:translateY(-50%);
-  background: rgba(0,0,0,0.3); color:#fff; border:none; padding:12px;
-  border-radius:50%; cursor:pointer; font-size:22px; z-index:2;
-  transition: background 0.3s ease, opacity 0.3s ease;
-  opacity:0;
+.carousel img.active { 
+  display: block; /* Solo activa */
 }
-.carousel:hover .prev, .carousel:hover .next { opacity:1; }
-.carousel .prev { left:50%; transform: translate(-150%, -50%); }
-.carousel .next { right:50%; transform: translate(150%, -50%); }
 
 .photo-counter {
   position:absolute; bottom:10px; right:10px;
@@ -81,8 +72,15 @@ h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:va
   border-radius:12px; font-size:14px;
 }
 
-.info { padding:25px; text-align:center; opacity:0; transform:translateY(30px); transition:all 0.8s ease; }
+.info { 
+  padding:25px; 
+  text-align:center; 
+  opacity:0; 
+  transform:translateY(30px); 
+  transition:all 0.8s ease; 
+}
 .post.in-view .info { opacity:1; transform:translateY(0); }
+
 .info h2 { font-size:22px; margin:10px 0; color:var(--text); }
 .price { font-size:20px; color:#3b82f6; font-weight:600; margin:8px 0; }
 .desc { font-size:16px; color:var(--subtext); margin:12px 0; line-height:1.6; }
@@ -97,49 +95,25 @@ h1 { text-align:center; margin:30px 0; font-size:2rem; font-weight:700; color:va
 footer { text-align:center; padding:35px 10px; background:#111827; color:#f3f4f6; font-size:14px; }
 
 @media(max-width:600px){
-  .carousel img{height:250px;}
+  .carousel img{height:auto;}
   .info h2{font-size:18px;}
   .price{font-size:16px;}
   .desc{font-size:14px;}
 }
-
-#cart { position: fixed; bottom:20px; right:20px;
-  background:var(--accent); color:#fff; width:60px; height:60px;
-  border-radius:50%; font-size:28px; display:flex; align-items:center; justify-content:center;
-  box-shadow:0 6px 20px rgba(34,197,94,0.3); cursor:pointer; transition:all 0.3s ease; z-index:10000; }
-#cart:hover { background: var(--accent-dark); transform: scale(1.1); }
-
-#cartContent {
-  position:fixed; bottom:90px; right:20px;
-  background: var(--card-bg); color: var(--text); padding:15px; border-radius:12px;
-  max-width:250px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); display:none; z-index:9999;
-}
-#cartContent h3 { margin-top:0; font-size:18px; }
-#cartContent p { margin:5px 0; font-size:14px; }
 </style>
 </head>
+
 <body>
-
-<div id="intro">
-  <h1>Bienvenido a Mi Tienda</h1>
-  <p>Descubre productos increíbles</p>
-</div>
-
-<h1>🛒 Productos de Mi Tienda</h1>
+<h1>🛒 Catálogo de Productos</h1>
 <div class="feed" id="productFeed"></div>
 
-<div id="cart">🛒</div>
-<div id="cartContent"><h3>Tu Carrito</h3></div>
-
 <footer>
-  <p><strong>📍 Mi Tienda Online</strong></p>
+  <p><strong>📍 Tienda Online RifaCuba360</strong></p>
   <p>WhatsApp: +5355555555</p>
   <p>© 2025 Todos los derechos reservados</p>
 </footer>
 
 <script>
-setTimeout(()=>{ document.getElementById('intro').classList.add('fade-out'); },3000);
-
 const productos = [
   { 
     nombre: "⌚ Reloj Digital",
@@ -148,7 +122,7 @@ const productos = [
     whatsapp: "5355555555",
     rating: 5,
     fotos: [
-      "https://cdn.jsdelivr.net/gh/rifacuba360/paginashe14@main/activo/reloj.png"
+      "https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/reloj.png"
     ]
   },
   {
@@ -158,19 +132,19 @@ const productos = [
     whatsapp: "5355555555",
     rating: 4,
     fotos: [
-      "https://cdn.jsdelivr.net/gh/rifacuba360/paginashe14@main/activo/imagen1.PNG"
+      "https://raw.githubusercontent.com/rifacuba360/paginashe14/main/activo/imagen1.PNG"
     ]
   }
 ];
 
+// Mostrar productos
 const feed = document.getElementById("productFeed");
 productos.forEach((prod,i)=>{
   const post=document.createElement("div");
   post.className="post";
   const stars="⭐".repeat(prod.rating)+"☆".repeat(5-prod.rating);
 
-  const carouselHtml=`
-    <div class="carousel" id="carousel-${i}">
+  const carouselHtml=`<div class="carousel" id="carousel-${i}">
       ${prod.fotos.map((f,idx)=>`
         <img src="${f}" class="${idx===0?'active':''}" onerror="this.src='https://via.placeholder.com/400x300?text=Sin+imagen'">
       `).join('')}
@@ -189,14 +163,11 @@ productos.forEach((prod,i)=>{
   feed.appendChild(post);
 });
 
+// Animación al aparecer
 const observer=new IntersectionObserver(entries=>{
   entries.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add("in-view"); });
 },{threshold:0.25});
 document.querySelectorAll(".post").forEach(p=>observer.observe(p));
-
-const cart=document.getElementById('cart');
-const cartContent=document.getElementById('cartContent');
-cart.addEventListener('click',()=>{ cartContent.style.display = cartContent.style.display==='block'?'none':'block'; });
 </script>
 </body>
 </html>
