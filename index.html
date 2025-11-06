@@ -1,20 +1,174 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Página Animada GitHub</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- GSAP -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galería de Productos</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f3f4f6;
+  }
+
+  h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #222;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.7s ease;
+  }
+
+  .card.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .card img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    transition: transform 0.8s ease, opacity 0.8s ease;
+  }
+
+  .card img.fade {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  .info {
+    padding: 15px;
+  }
+
+  .info h2 {
+    font-size: 18px;
+    margin: 0 0 10px;
+    color: #111;
+  }
+
+  .price {
+    color: #2563eb;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .desc {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Efecto general tipo Facebook scroll */
+  .card.in-view {
+    animation: fadeInUp 0.8s ease forwards;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1 class="titulo">¡Bienvenido a mi página animada!</h1>
-    <p class="subtitulo">GitHub Pages + Animaciones GSAP</p>
-    <img src="images/imagen1.png" class="imagen-animada" alt="Imagen animada">
-    <button class="boton">Haz click aquí</button>
-  </div>
-  <script src="script.js"></script>
+
+<h1>🛍️ Galería de Productos</h1>
+<div class="container" id="productContainer"></div>
+
+<script>
+// 💡 Aquí pones tus productos
+// Solo cambia las imágenes, nombres, precios y descripción fácilmente.
+const productos = [
+  {
+    imagen: "assets/producto1.jpg",
+    nombre: "Auriculares Bluetooth",
+    precio: "$25.00",
+    descripcion: "Auriculares inalámbricos con cancelación de ruido y gran duración de batería."
+  },
+  {
+    imagen: "assets/producto2.jpg",
+    nombre: "Reloj Inteligente",
+    precio: "$40.00",
+    descripcion: "Reloj moderno con monitor cardíaco, pasos y conexión a tu teléfono."
+  },
+  {
+    imagen: "assets/producto3.jpg",
+    nombre: "Cámara Deportiva",
+    precio: "$55.00",
+    descripcion: "Graba tus aventuras en HD, resistente al agua y con accesorios incluidos."
+  }
+  // 👉 Puedes agregar más productos copiando y pegando este formato
+  /*
+  ,
+  {
+    imagen: "assets/tuimagen.jpg",
+    nombre: "Nombre del producto",
+    precio: "$0.00",
+    descripcion: "Descripción del producto."
+  }
+  */
+];
+
+// 👇 No toques el código de abajo (se encarga de mostrar todo bonito)
+const contenedor = document.getElementById('productContainer');
+
+productos.forEach(prod => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <img src="${prod.imagen}" alt="${prod.nombre}">
+    <div class="info">
+      <h2>${prod.nombre}</h2>
+      <div class="price">${prod.precio}</div>
+      <div class="desc">${prod.descripcion}</div>
+    </div>
+  `;
+  contenedor.appendChild(card);
+});
+
+// Efecto de aparición al hacer scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+    }
+  });
+});
+document.querySelectorAll('.card').forEach(c => observer.observe(c));
+
+// Efecto cambio (deslizamiento / fade) al pasar de una imagen a otra
+document.querySelectorAll('.card img').forEach(img => {
+  img.addEventListener('click', () => {
+    img.classList.add('fade');
+    setTimeout(() => {
+      img.classList.remove('fade');
+    }, 800);
+  });
+});
+</script>
+
 </body>
 </html>
