@@ -4,72 +4,78 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🛍️ Mi Tienda Online</title>
+
 <style>
   :root {
-    --bg: #f0f2f5;
-    --card-bg: #fff;
+    --bg: #f4f6f8;
+    --card-bg: #ffffff;
     --accent: #22c55e;
-    --shadow: 0 8px 30px rgba(0,0,0,0.15);
+    --accent-dark: #16a34a;
+    --text: #1f2937;
+    --subtext: #6b7280;
+    --shadow: 0 10px 40px rgba(0,0,0,0.08);
+    --transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
     background: var(--bg);
+    color: var(--text);
     overflow-x: hidden;
   }
 
   h1 {
     text-align: center;
-    margin: 25px 0;
-    color: #111;
-    font-size: 28px;
-    letter-spacing: -0.5px;
+    margin: 30px 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
   }
 
   .feed {
-    max-width: 620px;
+    max-width: 680px;
     margin: 0 auto;
-    padding: 10px;
+    padding: 10px 15px 80px;
   }
 
   .post {
     background: var(--card-bg);
-    border-radius: 15px;
-    margin-bottom: 25px;
+    border-radius: 18px;
+    margin-bottom: 30px;
     box-shadow: var(--shadow);
     overflow: hidden;
-    transform: translateY(60px) scale(0.96);
     opacity: 0;
-    filter: blur(6px);
-    transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+    transform: translateY(80px) scale(0.96);
+    filter: blur(8px);
+    transition: var(--transition);
     will-change: transform, opacity, filter;
   }
 
-  /* 🎬 Efecto fade + movimiento lateral al aparecer */
+  /* 🎬 Fade in + movimiento al entrar */
   .post.in-view {
-    transform: translateY(0) scale(1);
     opacity: 1;
+    transform: translateY(0) scale(1);
     filter: blur(0);
   }
 
   .post img {
     width: 100%;
-    height: 380px;
+    height: 400px;
     object-fit: cover;
-    transition: transform 1.2s ease, opacity 1s ease, filter 1s ease;
+    transition: transform 1.2s ease, filter 1s ease;
     transform-origin: center;
     display: block;
   }
 
-  /* 🎞️ Zoom + brillo al pasar el mouse */
+  /* 🌟 Efecto 3D suave al pasar el mouse */
   .post img:hover {
-    transform: scale(1.08);
+    transform: scale(1.1) rotate3d(1, 1, 0, 3deg);
     filter: brightness(1.1);
   }
 
   .info {
-    padding: 15px;
+    padding: 20px;
     text-align: center;
     opacity: 0;
     transform: translateY(30px);
@@ -82,59 +88,71 @@
   }
 
   .info h2 {
-    font-size: 20px;
-    margin: 5px 0;
-    color: #111;
+    font-size: 22px;
+    margin: 10px 0;
+    color: var(--text);
   }
 
   .price {
+    font-size: 19px;
     color: #2563eb;
     font-weight: 600;
-    font-size: 18px;
-    margin: 5px 0;
+    margin: 8px 0;
   }
 
   .desc {
-    color: #555;
     font-size: 15px;
+    color: var(--subtext);
     margin: 10px 0;
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   .rating {
     color: #fbbf24;
-    font-size: 18px;
+    margin-bottom: 10px;
   }
 
   .buy-btn {
     display: inline-block;
     background: var(--accent);
     color: #fff;
-    padding: 10px 25px;
-    border-radius: 25px;
-    text-decoration: none;
+    padding: 12px 30px;
+    border-radius: 50px;
     font-weight: 600;
-    margin-top: 10px;
-    box-shadow: 0 5px 15px rgba(34,197,94,0.3);
-    transition: all 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(34,197,94,0.3);
+    transition: all 0.4s ease;
   }
 
   .buy-btn:hover {
-    background: #16a34a;
+    background: var(--accent-dark);
     transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(22,163,74,0.35);
+    box-shadow: 0 8px 25px rgba(22,163,74,0.4);
   }
 
   footer {
     text-align: center;
-    padding: 25px;
-    background: #1e293b;
-    color: #fff;
+    padding: 35px 10px;
+    background: #111827;
+    color: #f3f4f6;
     font-size: 14px;
   }
 
   footer p {
-    margin: 5px 0;
+    margin: 6px 0;
+  }
+
+  /* 📱 Responsividad */
+  @media (max-width: 600px) {
+    .post img {
+      height: 300px;
+    }
+    .info h2 {
+      font-size: 18px;
+    }
+    .price {
+      font-size: 16px;
+    }
   }
 </style>
 </head>
@@ -151,7 +169,7 @@
 </footer>
 
 <script>
-// 🖼️ Productos
+// 🖼️ Productos dinámicos
 const productos = [
   {
     imagen: "activo/reloj.jpg",
@@ -165,7 +183,7 @@ const productos = [
     imagen: "activo/auriculares.jpg",
     nombre: "🎧 Auriculares Bluetooth",
     precio: "$30.00",
-    descripcion: "Cancelación de ruido y conexión estable.",
+    descripcion: "Cancelación de ruido, conexión estable y carga rápida.",
     whatsapp: "5355555555",
     rating: 4
   },
@@ -176,16 +194,24 @@ const productos = [
     descripcion: "Graba tus aventuras en alta definición con accesorios incluidos.",
     whatsapp: "5355555555",
     rating: 5
+  },
+  {
+    imagen: "activo/smartphone.jpg",
+    nombre: "📱 Smartphone Android",
+    precio: "$180.00",
+    descripcion: "Pantalla AMOLED, batería de larga duración y cámara triple.",
+    whatsapp: "5355555555",
+    rating: 5
   }
 ];
 
-// 🚀 Generar publicaciones dinámicamente
+// 🚀 Crear los posts dinámicamente
 const feed = document.getElementById("productFeed");
 productos.forEach(prod => {
   const post = document.createElement("div");
   post.className = "post";
   const stars = "⭐".repeat(prod.rating) + "☆".repeat(5 - prod.rating);
-  const whatsappLink = `https://wa.me/${prod.whatsapp}?text=Hola!%20Estoy%20interesado%20en%20${encodeURIComponent(prod.nombre)}`;
+  const whatsappLink = `https://wa.me/${prod.whatsapp}?text=Hola!%20Estoy%20interesado%20en%20${encodeURIComponent(prod.nombre)}%20que%20vi%20en%20su%20tienda.`;
   post.innerHTML = `
     <img src="${prod.imagen}" alt="${prod.nombre}">
     <div class="info">
@@ -199,14 +225,16 @@ productos.forEach(prod => {
   feed.appendChild(post);
 });
 
-// 👁️ Efecto fade + blur al entrar en pantalla
+// 👁️ Activar animaciones al entrar en vista
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) entry.target.classList.add("in-view");
   });
-}, { threshold: 0.2 });
+}, { threshold: 0.25 });
+
 document.querySelectorAll(".post").forEach(p => observer.observe(p));
 </script>
 
 </body>
 </html>
+
