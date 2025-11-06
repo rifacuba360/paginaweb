@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🛍️ Mi Tienda Profesional</title>
+<title>🛍️ Mi Tienda Profesional - Dark Mode</title>
 <style>
   :root {
-    --bg: #f4f6f8;
-    --card-bg: #fff;
+    --bg: #121212;
+    --card-bg: #1e1e1e;
     --accent: #22c55e;
     --accent-dark: #16a34a;
-    --text: #1f2937;
-    --subtext: #6b7280;
-    --shadow: 0 10px 40px rgba(0,0,0,0.08);
+    --text: #f3f4f6;
+    --subtext: #9ca3af;
+    --shadow: 0 10px 40px rgba(0,0,0,0.6);
     --transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
@@ -29,6 +29,7 @@
     margin: 30px 0;
     font-size: 2rem;
     font-weight: 700;
+    color: var(--text);
   }
 
   .feed {
@@ -69,6 +70,7 @@
     transition: transform 1s ease, filter 0.8s ease;
     transform-origin: center;
     display: block;
+    border-radius: 18px 18px 0 0;
   }
 
   .carousel img:hover {
@@ -76,12 +78,11 @@
     filter: brightness(1.1);
   }
 
-  /* Flechas de navegación */
   .carousel .prev, .carousel .next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.3);
     color: #fff;
     border: none;
     padding: 10px;
@@ -93,7 +94,7 @@
   }
 
   .carousel .prev:hover, .carousel .next:hover {
-    background: rgba(0,0,0,0.35);
+    background: rgba(0,0,0,0.6);
   }
 
   .carousel .prev { left: 10px; }
@@ -115,11 +116,12 @@
   .info h2 {
     font-size: 22px;
     margin: 10px 0;
+    color: var(--text);
   }
 
   .price {
     font-size: 19px;
-    color: #2563eb;
+    color: #3b82f6;
     font-weight: 600;
     margin: 8px 0;
   }
@@ -137,7 +139,7 @@
     font-size: 18px;
   }
 
-  .buy-btn {
+  .buy-btn, .add-cart-btn {
     display: inline-block;
     background: var(--accent);
     color: #fff;
@@ -147,19 +149,97 @@
     text-decoration: none;
     box-shadow: 0 6px 20px rgba(34,197,94,0.3);
     transition: all 0.4s ease;
+    margin: 5px;
+    cursor: pointer;
   }
 
-  .buy-btn:hover {
+  .buy-btn:hover, .add-cart-btn:hover {
     background: var(--accent-dark);
     transform: scale(1.05);
     box-shadow: 0 8px 25px rgba(22,163,74,0.4);
   }
 
-  .end-message {
+  /* Carrito */
+  .cart {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 100%;
+    background: var(--card-bg);
+    box-shadow: -5px 0 25px rgba(0,0,0,0.5);
+    transition: right 0.5s ease;
+    padding: 20px;
+    z-index: 999;
+    overflow-y: auto;
+  }
+
+  .cart.open { right: 0; }
+
+  .cart h2 {
     text-align: center;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+  }
+
+  .cart-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .cart-item-details {
+    flex: 1;
+    margin-left: 10px;
+  }
+
+  .cart-item-details h4 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text);
+  }
+
+  .cart-item-details span {
     font-size: 14px;
     color: var(--subtext);
-    padding: 20px 0;
+  }
+
+  .cart-total {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .cart-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 6px 20px rgba(34,197,94,0.3);
+    transition: all 0.3s ease;
+  }
+
+  .cart-toggle:hover {
+    background: var(--accent-dark);
+    transform: scale(1.05);
   }
 
   footer {
@@ -171,9 +251,10 @@
   }
 
   @media (max-width: 600px) {
-    .carousel img { height: 300px; }
+    .carousel img { height: 250px; }
     .info h2 { font-size: 18px; }
     .price { font-size: 16px; }
+    .cart { width: 90%; }
   }
 </style>
 </head>
@@ -181,8 +262,13 @@
 
 <h1>🛒 Productos de Mi Tienda</h1>
 <div class="feed" id="productFeed"></div>
-<div id="endMessage" class="end-message" style="display:none;">
-  © 2025 Todos los derechos reservados – Mi Tienda Online
+
+<button class="cart-toggle" id="cartToggle">🛒 Carrito (<span id="cartCount">0</span>)</button>
+
+<div class="cart" id="cart">
+  <h2>Mi Carrito</h2>
+  <div id="cartItems"></div>
+  <div class="cart-total" id="cartTotal">Total: $0</div>
 </div>
 
 <footer>
@@ -194,46 +280,28 @@
 <script>
 // Productos
 const productos = [
-  {
-    nombre: "⌚ Reloj Digital",
-    precio: "$25.00",
-    descripcion: "Pantalla LED, resistente al agua y diseño elegante.",
-    whatsapp: "5355555555",
-    rating: 5,
-    fotos: ["activo/reloj.jpg", "activo/reloj2.jpg", "activo/reloj3.jpg"]
-  },
-  {
-    nombre: "🎧 Auriculares Bluetooth",
-    precio: "$30.00",
-    descripcion: "Cancelación de ruido, conexión estable y carga rápida.",
-    whatsapp: "5355555555",
-    rating: 4,
-    fotos: ["activo/auriculares.jpg", "activo/auriculares2.jpg"]
-  },
-  {
-    nombre: "📷 Cámara Deportiva HD",
-    precio: "$60.00",
-    descripcion: "Graba tus aventuras en alta definición con accesorios incluidos.",
-    whatsapp: "5355555555",
-    rating: 5,
-    fotos: ["activo/camara.jpg", "activo/camara2.jpg", "activo/camara3.jpg"]
-  }
+  { nombre: "⌚ Reloj Digital", precio: 25, descripcion: "Pantalla LED, resistente al agua y diseño elegante.", whatsapp: "5355555555", rating: 5, fotos: ["activo/reloj.jpg","activo/reloj2.jpg","activo/reloj3.jpg"] },
+  { nombre: "🎧 Auriculares Bluetooth", precio: 30, descripcion: "Cancelación de ruido, conexión estable y carga rápida.", whatsapp: "5355555555", rating: 4, fotos: ["activo/auriculares.jpg","activo/auriculares2.jpg"] },
+  { nombre: "📷 Cámara Deportiva HD", precio: 60, descripcion: "Graba tus aventuras en alta definición con accesorios incluidos.", whatsapp: "5355555555", rating: 5, fotos: ["activo/camara.jpg","activo/camara2.jpg","activo/camara3.jpg"] }
 ];
 
-// Crear posts
 const feed = document.getElementById("productFeed");
+let cart = [];
+const cartItems = document.getElementById('cartItems');
+const cartCount = document.getElementById('cartCount');
+const cartTotal = document.getElementById('cartTotal');
+
+// Crear posts
 productos.forEach((prod, i) => {
   const post = document.createElement("div");
   post.className = "post";
 
   const stars = "⭐".repeat(prod.rating) + "☆".repeat(5 - prod.rating);
-  const whatsappLink = `https://wa.me/${prod.whatsapp}?text=Hola!%20Estoy%20interesado%20en%20${encodeURIComponent(prod.nombre)}`;
 
-  // Carrusel
   const carouselHtml = `
     <div class="carousel" id="carousel-${i}">
-      ${prod.fotos.map((f, idx) => `<img src="${f}" style="${idx === 0 ? '' : 'display:none;'}">`).join('')}
-      ${prod.fotos.length > 1 ? '<button class="prev">&#10094;</button><button class="next">&#10095;</button>' : ''}
+      ${prod.fotos.map((f, idx) => `<img src="${f}" style="${idx===0?'':'display:none;'}">`).join('')}
+      ${prod.fotos.length>1?'<button class="prev">&#10094;</button><button class="next">&#10095;</button>':''}
     </div>
   `;
 
@@ -241,12 +309,13 @@ productos.forEach((prod, i) => {
     ${carouselHtml}
     <div class="info">
       <h2>${prod.nombre}</h2>
-      <div class="price">${prod.precio}</div>
+      <div class="price">$${prod.precio}</div>
       <div class="rating">${stars}</div>
       <div class="desc">${prod.descripcion}</div>
-      <a href="${whatsappLink}" target="_blank" class="buy-btn">💬 Comprar por WhatsApp</a>
+      <button class="add-cart-btn">🛒 Agregar al carrito</button>
     </div>
   `;
+
   feed.appendChild(post);
 
   // Carrusel funcional
@@ -255,7 +324,7 @@ productos.forEach((prod, i) => {
   let current = 0;
   const prevBtn = carousel.querySelector('.prev');
   const nextBtn = carousel.querySelector('.next');
-  if (prevBtn && nextBtn) {
+  if(prevBtn && nextBtn){
     prevBtn.addEventListener('click', () => {
       imgs[current].style.display = "none";
       current = (current - 1 + imgs.length) % imgs.length;
@@ -267,26 +336,48 @@ productos.forEach((prod, i) => {
       imgs[current].style.display = "block";
     });
   }
-});
 
-// Intersection Observer para animaciones fade + slide
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add("in-view");
+  // Agregar al carrito
+  const addBtn = post.querySelector('.add-cart-btn');
+  addBtn.addEventListener('click', () => {
+    const existing = cart.find(item => item.nombre === prod.nombre);
+    if(existing){ existing.cantidad++; } else { cart.push({...prod, cantidad:1}); }
+    updateCart();
   });
-}, { threshold: 0.25 });
-
-document.querySelectorAll(".post").forEach(p => observer.observe(p));
-
-// Efecto infinito con mensaje final
-let feedEnd = false;
-window.addEventListener('scroll', () => {
-  const endMessage = document.getElementById('endMessage');
-  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10 && !feedEnd) {
-    feedEnd = true;
-    endMessage.style.display = "block"; // Mostrar derechos de autor
-  }
 });
+
+// Animaciones fade + slide
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting) entry.target.classList.add("in-view");
+  });
+},{threshold:0.25});
+document.querySelectorAll(".post").forEach(p=>observer.observe(p));
+
+// Carrito toggle
+const cartEl = document.getElementById('cart');
+document.getElementById('cartToggle').addEventListener('click', () => {
+  cartEl.classList.toggle('open');
+});
+
+function updateCart(){
+  cartItems.innerHTML = '';
+  let total = 0;
+  cart.forEach(item=>{
+    total += item.precio * item.cantidad;
+    cartItems.innerHTML += `
+      <div class="cart-item">
+        <img src="${item.fotos[0]}">
+        <div class="cart-item-details">
+          <h4>${item.nombre}</h4>
+          <span>$${item.precio} x ${item.cantidad}</span>
+        </div>
+      </div>
+    `;
+  });
+  cartCount.textContent = cart.reduce((a,b)=>a+b.cantidad,0);
+  cartTotal.textContent = `Total: $${total}`;
+}
 </script>
 
 </body>
